@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Photon.Pun;
 
-public class Ball : MonoBehaviourPunCallbacks
+public class Ball : MonoBehaviour
 {
     private GameObject tpc;
 

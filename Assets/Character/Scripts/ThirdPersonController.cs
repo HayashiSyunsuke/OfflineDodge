@@ -2,17 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Photon.Pun;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(PlayerInput))]
 
-public class ThirdPersonController : MonoBehaviourPunCallbacks, IPunObservable
+public class ThirdPersonController : MonoBehaviour
 {
-    [SerializeField] PhotonDataSend photonDataSend;
-
-
 
     /*-----PlayerStatus-----*/
     [Header("Player")]
@@ -251,33 +247,13 @@ public class ThirdPersonController : MonoBehaviourPunCallbacks, IPunObservable
 
 
 
-    void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-
-        if (stream.IsWriting)
-        {
-            // Transformの値をストリームに書き込んで送信する
-            stream.SendNext(this.hp);
-
-        }
-        else
-        {
-            // 受信したストリームを読み込んでTransformの値を更新する
-            //thirdPersonController.hp = (int)stream.ReceiveNext();
-            //text.text = (string)stream.ReceiveNext();
-            Debug.Log(stream.ReceiveNext());
-        }
-
-    }
+   
 
     private void Update()
     {
         
 
-        if(!photonView.IsMine)
-        {
-            return;
-        }
+       
         
 
         //アニメーターをセット
@@ -705,7 +681,7 @@ public class ThirdPersonController : MonoBehaviourPunCallbacks, IPunObservable
 
                     if(hasCatchBall)
                     {
-                        photonView.RPC(nameof(PickUpBall), RpcTarget.All, this.gameObject);
+                        
                     }
                 }
 
@@ -922,11 +898,10 @@ public class ThirdPersonController : MonoBehaviourPunCallbacks, IPunObservable
         {
             RpcSendMessage("こんにちは");
 
-            photonView.RPC(nameof(RpcSendMessage), RpcTarget.All, "おはよう");
+            
         }
     }
 
-    [PunRPC]
     private void RpcSendMessage(string message)
     {
         Debug.Log(message);
