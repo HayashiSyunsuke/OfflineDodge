@@ -9,15 +9,17 @@ using UnityEngine.UI;
 
 public class ThirdPersonController : MonoBehaviour
 {
-
     /*-----PlayerStatus-----*/
     [Header("Player")]
+    [Tooltip("CharacterNumber")] [SerializeField] private int playerNumber;
     //キャラクターの位置
     [Tooltip("Character position")] private Vector3 position;
     //キャラクターのWalkSpeed
     [Tooltip("Move Speed of the character")] public float MoveSpeed = 2.0f;
     //キャラクターのSprintSpeed
     [Tooltip("Sprint Speed of the character")] public float SprintSpeed = 5.3f;
+    //キャラクターのターゲット時の速度
+    [Tooltip("Move Speed of the Character's movement speed when targeting")] public float TargetingMoveSpeed = 2.0f;
     //キャラクターのDodgeSpeed
     [Tooltip("Dodge speed of the character")] public float DodgeSpeed = 5.3f;
     //キャラクターの振り向きをスムーズにする時間
@@ -25,9 +27,17 @@ public class ThirdPersonController : MonoBehaviour
     //キャラクターの加速度&減速度
     [Tooltip("Acceleration and Deceleration")] public float SpeedChangeRate = 10.0f;
     //キャラクターのオーディオクリップ
+    public AudioSource audioSource;
     public AudioClip LandingAudioClip;
+    public AudioClip CatchAudioClip;
+    public AudioClip ThrowAudioClip;
+
     public AudioClip[] FootstepAudioClips;
+
     [Range(0, 1)] public float FootstepAudioVolume = 0.5f;
+    [Range(0, 1)] public float CatchAudioVolume = 0.5f;
+    [Range(0, 1)] public float ThrowAudioVolume = 0.5f;
+
     //キャラクターのジャンプ力
     [Space(10)]
     [Tooltip("Jump height of the character")] public float JumpHeight = 1.2f;
@@ -70,6 +80,8 @@ public class ThirdPersonController : MonoBehaviour
     [Tooltip("The radius of the ball check")] public float BallCheckRadius = 0.5f;
     //どのタグのオブジェクトと当たり判定を取るか
     [Tooltip("What Tags the character use as ball")] public LayerMask BallLayers;
+    //ボールを保持する手のGameObject
+    [Tooltip("RightHand")] public GameObject rightHandGameObject;
     //ボールを判定するコライダーの位置
     [Tooltip("The position of the ball check")] public Vector3 playerDirection = Vector3.zero;
     //ボールのレイヤー番号
@@ -87,7 +99,8 @@ public class ThirdPersonController : MonoBehaviour
     [Tooltip("If the character is passing or not")] public bool Passing = false;
     //キャラクターがフェイントをしているか
     [Tooltip("If the character is fianting or not")] public bool Fainting = false;
-
+    // キャラクターが死んでるか
+    [Tooltip("If the character is Dieing or not")] public bool Dieing = false;
     /*-----プレイヤーの回避動作-----*/
     [Header("Player Dodging")]
     //キャラクターが避けているか
@@ -100,9 +113,8 @@ public class ThirdPersonController : MonoBehaviour
     Vector3 ballCheckSpherePosition;
 
     /*-----ターゲット-----*/
-    //[Header("Target list")] private List<GameObject> enemyList = new List<GameObject>();
-    [Header("Target list")] private GameObject[] enemies; 
     [Header("Current targets")] public GameObject CurrentTarget;
+
     /*-----シネマシーン-----*/
     [Header("Cinemachine")]
     //シネマシーン
@@ -115,6 +127,9 @@ public class ThirdPersonController : MonoBehaviour
     [Tooltip("Useful for fine tuning camera position when locked")] public float CameraAngleOverride = 0.0f;
     //全軸のカメラ位置を固定
     [Tooltip("For locking the camera posotion on all axis")] public bool LockCameraPosition = false;
+
+    /*-----敵-----*/
+    [Tooltip("EnemyObject")] private GameObject enemyGameObject;
 
     //シネマシーン
     private float cinemachineTargetYaw;
@@ -148,9 +163,23 @@ public class ThirdPersonController : MonoBehaviour
     private int animIDCatch;
     private int animIDPass;
     private int animIDFaint;
+    private int animIDDie;
+    private int animIDTarget;
+    private int animIDFront;
+    private int animIDSide;
 
     //ボールを投げたか
     private bool Throwed = false;
+
+    /*-----スキル-----*/
+    public CoolTime coolTime;
+
+    [SerializeField] private Camera camera;
+    [SerializeField] private GameObject virtualCamera;
+
+    [SerializeField] private RectTransform rectTransform;
+
+    [SerializeField] PlayerCounter playerCounter;
 
 #if ENABLE_INPUT_SYSTEM
     private PlayerInput playerInput;
@@ -167,26 +196,9 @@ public class ThirdPersonController : MonoBehaviour
     //現在のアニメーション
     private bool hasAnimator;
 
-
-    /// <summary>
-    public float hp = 100;
-    [SerializeField] Text text1 = null;
-    /// </summary>
-    /// 
-
-    // 他プレイヤーのHPリスト
-    //List<float> hpList = new List<float>();
-
-    //--------------------------------------------------------
-
-    //[SerializeField] Player player = null;
-    [SerializeField] Text text;
-    //public ThirdPersonController thirdPersonController;
-
-
     private bool IsCurrentDeviceMouse
     {
-        get 
+        get
         {
 #if ENABLE_INPUT_SYSTEM
             return playerInput.currentControlScheme == "KeyboardMouse";
@@ -198,13 +210,63 @@ public class ThirdPersonController : MonoBehaviour
 
     private void Awake()
     {
-        //photonDataSend = GameObject.Find("PhotonConnect").GetComponent<PhotonDataSend>();
-        //photonDataSend.thirdPersonController = this.GetComponent<ThirdPersonController>();
-
         //メインカメラを取得
-        if(mainCamera == null)
+        if (mainCamera == null)
         {
-            mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+            //mainCamera = this.transform.root.gameObject.FindGameObjectWithTag("MainCamera");
+            mainCamera = this.transform.root.Find("Camera").gameObject;
+
+            controller = GetComponent<CharacterController>();
+
+            playerCounter = GameObject.Find("PlayerManager").GetComponent<PlayerCounter>();
+            playerCounter.PlayerNum++;
+
+            this.gameObject.name = "FemaleDummy" + playerCounter.PlayerNum;
+
+            if (playerCounter.PlayerNum == 1)
+            {
+                this.gameObject.layer = 13;
+                virtualCamera.gameObject.layer = 13;
+
+                camera.cullingMask = ~(1 << 14);
+
+                rectTransform.localPosition = new Vector2(-480f, 0f);
+
+                playerNumber = 1;
+
+                
+            }
+            else if (playerCounter.PlayerNum == 2)
+            {
+                this.gameObject.layer = 14;
+                virtualCamera.gameObject.layer = 14;
+
+                camera.cullingMask = ~(1 << 13);
+
+                rectTransform.localPosition = new Vector2(480f, 0f);
+
+                GameObject p1 = GameObject.Find("FemaleDummy1");
+                GameObject p2 = GameObject.Find("FemaleDummy2");
+
+                p1.GetComponent<ThirdPersonController>().SetEnemy = p2;
+                p2.GetComponent<ThirdPersonController>().SetEnemy = p1;
+
+                playerNumber = 2;
+
+                
+            }
+        }
+
+        if (playerNumber == 1)
+        {
+            controller.Move(new Vector3(0f, 0f, 3f));
+        }
+        else
+        {
+            GameObject mr = GameObject.Find("Movement Restrictions");
+            mr.SetActive(false);
+            controller.Move(new Vector3(0f, 0f, -50f));
+            mr.SetActive(true);
         }
     }
 
@@ -215,7 +277,7 @@ public class ThirdPersonController : MonoBehaviour
 
         //各コンポーネントを取得
         hasAnimator = TryGetComponent(out animator);
-        controller = GetComponent<CharacterController>();
+        
         input = GetComponent<InputAsist>();
         tr = GetComponent<TrailRenderer>();
 #if ENABLE_INPUT_SYSTEM
@@ -234,28 +296,10 @@ public class ThirdPersonController : MonoBehaviour
         catchTimeoutDelta = CatchTimeout;
         passTimeoutDelta = PassTimeout;
         faintTimeoutDelta = FaintTimeout;
-
-        //enemyList.Add(GameObject.FindWithTag("Enemy").gameObject);
-        //enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        //tr.emitting = false;
-
-        text1 = GameObject.Find("Text1").GetComponent<Text>();
-        text = GameObject.Find("Text").GetComponent<Text>();
     }
-
-    // --------------------------------------------------------------------------------------------
-
-
-
-   
 
     private void Update()
     {
-        
-
-       
-        
-
         //アニメーターをセット
         hasAnimator = TryGetComponent(out animator);
 
@@ -264,18 +308,19 @@ public class ThirdPersonController : MonoBehaviour
         JumpAndGravity();
         GroundedCheck();
         BallCheck();
-        Attention();
-        Move();
+        //Attention();
+        NormalMove();
+        TargetMove();
         Throw();
         Pass();
         Faint();
         Dodge();
         Catch();
-        Talk();
+        //Die();
+        ChangeTargets();
+        ReturnBall();
 
-        DebugHP();
-
-        //EnemyReset();
+        ResetPosition();
     }
 
     private void LateUpdate()
@@ -295,6 +340,10 @@ public class ThirdPersonController : MonoBehaviour
         animIDCatch = Animator.StringToHash("Catch");
         animIDPass = Animator.StringToHash("Pass");
         animIDFaint = Animator.StringToHash("Faint");
+        animIDDie = Animator.StringToHash("die");
+        animIDTarget = Animator.StringToHash("Target");
+        animIDFront = Animator.StringToHash("Front");
+        animIDSide = Animator.StringToHash("Side");
     }
 
     /// <summary>
@@ -314,9 +363,6 @@ public class ThirdPersonController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// ボールとの判定
-    /// </summary>
     private void BallCheck()
     {
         Vector3 a = transform.position + playerDirection.normalized;
@@ -326,49 +372,72 @@ public class ThirdPersonController : MonoBehaviour
         //衝突判定を取得
         HasBall = Physics.CheckSphere(spherePosition, BallCheckRadius, BallLayers, QueryTriggerInteraction.Ignore);
 
-        if(HasBall && Grounded && !Dodging)
+        if (HasBall && Grounded && !Dodging)
         {
             //photonView.RPC(nameof(PickUpBall), RpcTarget.All, this.gameObject);
             PickUpBall();
         }
     }
-    
+
     /// <summary>
     /// カメラの回転(キャラクターの動きに合わせるためにUpdateよりも後に呼ぶ)
     /// </summary>
+    //private void CameraRotation()
+    //{
+    //    // 入力があり、カメラ位置が固定されていない場合
+    //    if (input.look.sqrMagnitude >= threshold && !LockCameraPosition)
+    //    {
+    //        //マウス入力時にはにdeltaTimeを掛けない
+    //        float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
+
+    //        //カメラの回転
+    //        cinemachineTargetYaw += input.look.x * deltaTimeMultiplier;
+    //        cinemachineTargetPitch += input.look.y * deltaTimeMultiplier;
+    //    }
+
+    //    // 値が360°に制限されるようにする
+    //    cinemachineTargetYaw = ClampAngle(cinemachineTargetYaw, float.MinValue, float.MaxValue);
+    //    cinemachineTargetPitch = ClampAngle(cinemachineTargetPitch, BottomClamp, TopClamp);
+
+    //    // シネマシーンがフォローするターゲット
+    //    CinemachineCameraTarget.transform.rotation = Quaternion.Euler(cinemachineTargetPitch + CameraAngleOverride, cinemachineTargetYaw, 0.0f);
+    //}
+
     private void CameraRotation()
     {
-        // 入力があり、カメラ位置が固定されていない場合
+        // if there is an input and camera position is not fixed
         if (input.look.sqrMagnitude >= threshold && !LockCameraPosition)
         {
-            //マウス入力時にはにdeltaTimeを掛けない
+            //Don't multiply mouse input by Time.deltaTime;
             float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
 
-            //カメラの回転
             cinemachineTargetYaw += input.look.x * deltaTimeMultiplier;
             cinemachineTargetPitch += input.look.y * deltaTimeMultiplier;
         }
 
-        // 値が360°に制限されるようにする
+        // clamp our rotations so our values are limited 360 degrees
         cinemachineTargetYaw = ClampAngle(cinemachineTargetYaw, float.MinValue, float.MaxValue);
         cinemachineTargetPitch = ClampAngle(cinemachineTargetPitch, BottomClamp, TopClamp);
 
-        // シネマシーンがフォローするターゲット
-        CinemachineCameraTarget.transform.rotation = Quaternion.Euler(cinemachineTargetPitch + CameraAngleOverride, cinemachineTargetYaw, 0.0f);
+        // Cinemachine will follow this target
+        CinemachineCameraTarget.transform.rotation = Quaternion.Euler(cinemachineTargetPitch + CameraAngleOverride,
+            cinemachineTargetYaw, 0.0f);
     }
 
     /// <summary>
-    /// 移動
+    /// 通常状態の移動
     ///   ＋ジャンプ
     ///   ＋ダッシュ
     ///   ＋投げる？
     ///   ＋回避
     ///   ＋キャッチ？
     /// </summary>
-    private void Move()
+    private void NormalMove()
     {
+        if (CurrentTarget != null) return;
+
         //回避中は動けない
-        if (Dodging || Throwing) return;
+        if (Dodging || Throwing || Catching || Fainting) return;
 
         // 移動速度を設定
         float targetSpeed = SprintSpeed;
@@ -379,17 +448,19 @@ public class ThirdPersonController : MonoBehaviour
             //速度を0にする
             targetSpeed = 0.0f;
 
-            if(CurrentTarget != null)
+            if (CurrentTarget != null)
             {
-                //ターゲットの方を向く
-                targetRotation = Mathf.Atan2(CurrentTarget.transform.position.x - transform.position.x, CurrentTarget.transform.position.z - transform.position.z) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
+                //ターゲットの方向
+                targetRotation = Mathf.Atan2(CurrentTarget.transform.position.x - transform.position.x, CurrentTarget.transform.position.z - transform.position.z) * Mathf.Rad2Deg/* + mainCamera.transform.eulerAngles.y*/;
 
+                //第一引数:現在値　第二引数:目標値　第三引数:現在速度を格納する変数　第四引数:目標値に到達するまでのおおよその時間
                 float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref rotationVelocity, RotationSmoothTime);
 
                 // カメラの向いている方向に回転
                 transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+                //transform.Rotate(0f, targetRotation, 0f);
             }
-            
+
         }
 
         // 現在の水平方向の速度の参照
@@ -427,7 +498,6 @@ public class ThirdPersonController : MonoBehaviour
 
             float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref rotationVelocity, RotationSmoothTime);
 
-            // カメラの向いている方向に回転
             transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
         }
 
@@ -439,13 +509,100 @@ public class ThirdPersonController : MonoBehaviour
         // プレイヤーを移動させる
         controller.Move(targetDirection.normalized * (speed * Time.deltaTime) + new Vector3(0.0f, verticalVelocity, 0.0f) * Time.deltaTime);
 
-        position = transform.position;
+        //position = transform.position;
 
         if (hasAnimator)
         {
             //アニメーターのパラメータにブレンド情報, Input情報を入れる
             animator.SetFloat(animIDSpeed, animationBlend);
             animator.SetFloat(animIDMotionSpeed, inputMagnitude);
+
+            if (!CurrentTarget)
+                animator.SetBool(animIDTarget, false);
+            else
+                animator.SetBool(animIDTarget, true);
+        }
+    }
+
+    /// <summary>
+    /// ターゲット時の移動
+    /// </summary>
+    private void TargetMove()
+    {
+        if (CurrentTarget == null) return;
+
+        //回避中は動けない
+        if (Dodging || Throwing || Catching || Fainting) return;
+
+        // 移動速度を設定
+        float targetSpeed = TargetingMoveSpeed;
+
+        // 入力がない場合&回避中ではない場合
+        if (input.move == Vector2.zero && !Dodging)
+        {
+            //速度を0にする
+            targetSpeed = 0.0f;
+        }
+
+        // 現在の水平方向の速度の参照
+        float currentHorizontalSpeed = new Vector3(controller.velocity.x, 0.0f, controller.velocity.z).magnitude;
+
+        float speedOffset = 0.1f;
+        float inputMagnitude = input.analogMovement ? input.move.magnitude : 1f;
+
+        // 加速・減速
+        if (currentHorizontalSpeed < targetSpeed - speedOffset ||
+            currentHorizontalSpeed > targetSpeed + speedOffset)
+        {
+            speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * SpeedChangeRate);
+
+            //小数点以下三桁まで
+            speed = Mathf.Round(speed * 1000f) / 1000f;
+        }
+        else
+        {
+            //速度の維持
+            speed = targetSpeed;
+        }
+
+        //アニメーションパラメータのブレンド加減
+        animationBlend = Mathf.Lerp(animationBlend, targetSpeed, Time.deltaTime * SpeedChangeRate);
+        if (animationBlend < 0.01f) animationBlend = 0f;
+
+        // 入力方向を正規化
+        Vector3 inputDirection = new Vector3(input.move.x, 0.0f, input.move.y).normalized;
+
+
+
+        //ターゲットの方向
+        targetRotation = Mathf.Atan2(CurrentTarget.transform.position.x - transform.position.x, CurrentTarget.transform.position.z - transform.position.z) * Mathf.Rad2Deg/* + mainCamera.transform.eulerAngles.y*/;
+        //targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
+        float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref rotationVelocity, RotationSmoothTime);
+        transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+
+
+
+        Vector3 targetDirection = Quaternion.Euler(0.0f, targetRotation, 0.0f) * inputDirection/* * Vector3.forward*/;
+
+        playerDirection = targetDirection;
+
+        // プレイヤーを移動させる
+        controller.Move(targetDirection.normalized * (speed * Time.deltaTime) + new Vector3(0.0f, verticalVelocity, 0.0f) * Time.deltaTime);
+
+        position = transform.position;
+
+
+
+        if (hasAnimator)
+        {
+            //アニメーターのパラメータにブレンド情報, Input情報を入れる
+            animator.SetFloat(animIDSide, -targetDirection.z, 0.1f, Time.deltaTime);
+            animator.SetFloat(animIDFront, targetDirection.x, 0.1f, Time.deltaTime);
+
+            if (!CurrentTarget)
+                animator.SetBool(animIDTarget, false);
+            else
+                animator.SetBool(animIDTarget, true);
         }
     }
 
@@ -458,7 +615,7 @@ public class ThirdPersonController : MonoBehaviour
     private void JumpAndGravity()
     {
         //地面と接地している場合
-        if (Grounded)
+        if (Grounded && !CurrentTarget)
         {
             // fallTimeoutTimerをリセットする
             fallTimeoutDelta = FallTimeout;
@@ -487,12 +644,6 @@ public class ThirdPersonController : MonoBehaviour
                     //アニメーターのパラメータにジャンプ情報を入れる
                     animator.SetBool(animIDJump, true);
                 }
-
-                ///仮
-                hp -= 1f;
-                ///
-
-                Debug.Log(hp);
             }
 
             // ジャンプタイムアウトが残っていたら減らす
@@ -540,7 +691,6 @@ public class ThirdPersonController : MonoBehaviour
         //投げるキーが押されたら
         if (input.throwing && !Throwing && !Passing && !Fainting && isBallHaving && Grounded)
         {
-
             if (hasAnimator)
             {
                 Throwing = true;
@@ -557,7 +707,7 @@ public class ThirdPersonController : MonoBehaviour
             GameObject ball = GameObject.FindWithTag("Ball1");
 
             //ボールを手放す時間(要調整)
-            if (throwTimeoutDelta <= 0.84f && !Throwed)
+            if (throwTimeoutDelta <= 0.95f && !Throwed)
             {
                 ball.gameObject.transform.parent = null;
                 ball.GetComponent<Rigidbody>().isKinematic = false;
@@ -603,48 +753,52 @@ public class ThirdPersonController : MonoBehaviour
     {
         //tr.emitting = Dodging;
 
-        if(Grounded)
+        if (!coolTime.CoolTimeFlag)
         {
-            //避けるキーが押されたら
-            if(input.dodge)
+            if (Grounded)
             {
-                if(hasAnimator)
-                {
-                    Dodging = true;
-                    //アニメータのパラメータに情報を入れる
-                    animator.SetBool(animIDDodge, Dodging);
-                }
-            }
-
-            if (Dodging)
-            {
-                //回避
-                if(0.8f >= dodgeTimeoutDelta && dodgeTimeoutDelta >= 0.1f)
-                {
-                    controller.Move(transform.forward * DodgeSpeed * Time.deltaTime);
-                }
-
-                //回避時間が残っていたら減らす（回避を続ける）
-                if (dodgeTimeoutDelta >= 0.0f)
-                {
-                    dodgeTimeoutDelta -= Time.deltaTime;
-                }
-                //回避時間が残っていなかったらアニメーターを更新する
-                else
+                //避けるキーが押されたら
+                if (input.dodge)
                 {
                     if (hasAnimator)
                     {
-                        Dodging = false;
-                        //アニメータのパラメータに投げる情報を入れる
+                        Dodging = true;
+                        coolTime.CoolTimeFlag = Dodging;
+                        //アニメータのパラメータに情報を入れる
                         animator.SetBool(animIDDodge, Dodging);
                     }
                 }
             }
+        }
+
+        if (Dodging)
+        {
+            //回避
+            if (0.8f >= dodgeTimeoutDelta && dodgeTimeoutDelta >= 0.1f)
+            {
+                controller.Move(transform.forward * DodgeSpeed * Time.deltaTime);
+            }
+
+            //回避時間が残っていたら減らす（回避を続ける）
+            if (dodgeTimeoutDelta >= 0.0f)
+            {
+                dodgeTimeoutDelta -= Time.deltaTime;
+            }
+            //回避時間が残っていなかったらアニメーターを更新する
             else
             {
-                //避けるデルタタイムをリセット
-                dodgeTimeoutDelta = DodgeTimeout;
+                if (hasAnimator)
+                {
+                    Dodging = false;
+                    //アニメータのパラメータに投げる情報を入れる
+                    animator.SetBool(animIDDodge, Dodging);
+                }
             }
+        }
+        else
+        {
+            //避けるデルタタイムをリセット
+            dodgeTimeoutDelta = DodgeTimeout;
         }
     }
 
@@ -657,14 +811,14 @@ public class ThirdPersonController : MonoBehaviour
     {
         ballCheckSpherePosition = transform.position + transform.forward.normalized;
 
-        ballCheckSpherePosition.y = -3.5f;
+        ballCheckSpherePosition.y = 1.5f;
 
         if (Grounded)
         {
             //キャッチキーが押されたら
-            if(input.catching)
+            if (input.catching && !isBallHaving)
             {
-                if(hasAnimator)
+                if (hasAnimator)
                 {
                     Catching = true;
                     //アニメーターのパラメータに情報を入れる
@@ -674,26 +828,31 @@ public class ThirdPersonController : MonoBehaviour
 
             if (Catching)
             {
-                //キャッチ
-                if(0.4f >= catchTimeoutDelta && catchTimeoutDelta >= 0.3f)
+                if (!isBallHaving)
                 {
-                    bool hasCatchBall = Physics.CheckSphere(ballCheckSpherePosition, BallCheckRadius, BallLayers, QueryTriggerInteraction.Ignore);
-
-                    if(hasCatchBall)
+                    //キャッチ
+                    if (0.4f >= catchTimeoutDelta && catchTimeoutDelta >= 0.3f)
                     {
-                        
+                        bool hasCatchBall = Physics.CheckSphere(ballCheckSpherePosition, BallCheckRadius, BallLayers, QueryTriggerInteraction.Ignore);
+
+                        if (hasCatchBall)
+                        {
+
+                            PickUpBall();
+                        }
                     }
                 }
 
+
                 //時間が残っていたら減らす(キャッチを続ける)
-                if(catchTimeoutDelta >= 0.0f)
+                if (catchTimeoutDelta >= 0.0f)
                 {
                     catchTimeoutDelta -= Time.deltaTime;
                 }
                 //時間が残っていなかったらアニメーターを更新する
                 else
                 {
-                    if(hasAnimator)
+                    if (hasAnimator)
                     {
                         Catching = false;
                         //アニメーターのパラメータにキャッチの情報を入れる
@@ -715,7 +874,7 @@ public class ThirdPersonController : MonoBehaviour
     private void Pass()
     {
         //地面と接地している
-        if(Grounded)
+        if (Grounded)
         {
             //投げるキーが押されたら
             if (input.pass && !Throwing && !Passing && !Fainting)
@@ -822,89 +981,59 @@ public class ThirdPersonController : MonoBehaviour
         input.faint = false;
     }
 
-    /// <summary>
-    /// ターゲット変更
-    /// </summary>
-    private void Attention()
+    // 死ぬ
+    public void Die()
     {
-        //if(enemies != null)
-        //{
-        //    if (input.right)
-        //    {
-        //        CurrentTargets = enemies[0].gameObject;
-        //    }
-        //    else if (input.left)
-        //    {
-        //        CurrentTargets = enemies[1].gameObject;
-        //    }
-        //    else if (input.untarget && CurrentTargets != null)
-        //    {
-        //        CurrentTargets = null;
-        //    }
-        //}
-        if (CurrentTarget != null)
+        if (hasAnimator)
         {
-            if (input.untarget)
-            {
-                CurrentTarget = null;
-            }
+            Dieing = true;
+            //アニメーターのパラメータに投げる情報を入れる
+            animator.SetBool(animIDDie, Dieing);
         }
         else
         {
-            if(input.right)
-            {
-                //CurrentTarget = 
-            }
-            else if(input.left)
-            {
-                //CurrentTarget
-            }
+            Dieing = false;
+
         }
     }
 
-    //[PunRPC]
+    /// <summary>
+    /// ターゲット変更
+    /// </summary>
+    ///     
+    private void ChangeTargets()
+    {
+        if (input.untarget && Grounded && !Throwing && !Dodging && !Fainting && !Catching)
+        {
+            if (CurrentTarget != null)
+            {
+                //敵をターゲット解除
+                CurrentTarget = null;
+            }
+            else
+            {
+                //敵を追加
+                CurrentTarget = enemyGameObject;
+            }
+        }
+        input.untarget = false;
+    }
+
     /// <summary>
     /// ボールを拾う
     /// </summary>
     private void PickUpBall()
     {
-        //ボールの情報を取る
         GameObject ball = GameObject.FindWithTag("Ball1");
-
-        //ボールのTransform情報を取る
         Transform ballPosition = ball.GetComponent<Transform>();
-
-        //ボールの物理挙動の設定
         ball.GetComponent<Rigidbody>().isKinematic = true;
         ball.GetComponent<Rigidbody>().useGravity = false;
         ball.GetComponent<Ball>().UseGravity = false;
-
-        //右手を検索して位置を取得
-        Transform rightHand = GameObject.FindWithTag("RightHand").transform;
-
-        //ボールの位置を右手の位置で更新
+        Transform rightHand = rightHandGameObject.transform;//GameObject.FindWithTag("RightHand").transform;
         ballPosition.position = rightHand.position;
-
-        //ボールを右手の子に設定
         ball.transform.parent = rightHand;
-
-        //ボール所持フラグをtrue
         isBallHaving = true;
-    }
-
-    private void Talk()
-    {
-        if(input.talk)
-        {
-            RpcSendMessage("こんにちは");
-
-            
-        }
-    }
-
-    private void RpcSendMessage(string message)
-    {
-        Debug.Log(message);
+        audioSource.PlayOneShot(CatchAudioClip, CatchAudioVolume);
     }
 
     /// <summary>
@@ -946,17 +1075,6 @@ public class ThirdPersonController : MonoBehaviour
         Gizmos.DrawSphere(
           ballCheckSpherePosition,
            GroundedRadius);
-    }
-
-    private void OnGUI()
-    {
-        GUILayout.Label(hp.ToString());
-    }
-
-    private void DebugHP()
-    {
-        // スタミナをゲージに反映する
-        text1.text = hp.ToString();
     }
 
     private void OnFootstep(AnimationEvent animationEvent)
@@ -1010,5 +1128,61 @@ public class ThirdPersonController : MonoBehaviour
         {
             return CurrentTarget.transform.position;
         }
+    }
+
+    private void ReturnBall()
+    {
+        if (input.returned)
+        {
+            GameObject _ball = GameObject.FindWithTag("Ball1");
+            _ball.transform.position = new Vector3(0f, 3.83f, 0f);
+            _ball.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        }
+    }
+
+    private void ResetPosition()
+    {
+        if (this.transform.position.y < -15f)
+        {
+            verticalVelocity = 0f;
+            controller.Move(new Vector3(0f, 55f, 0f));
+        }
+    }
+
+
+    /// <summary>
+    /// 生存している敵を探す
+    /// </summary>
+    //private void AddEnemy()
+    //{
+    //    GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+
+    //    foreach(GameObject enemy in enemies)
+    //    {
+    //        enemyList.Add(enemy);
+    //    }
+    //}
+
+    /// <summary>
+    /// 生存している敵を開放する
+    /// </summary>
+    //private void EnemyReset()
+    //{
+    //    enemyList.Clear();
+    //}
+
+    public bool GetDodging
+    {
+        get { return Dodging; }
+    }
+
+    public bool GetJumping
+    {
+        get { return Grounded; }
+    }
+
+    public GameObject SetEnemy
+    {
+        set { enemyGameObject = value; }
     }
 }
