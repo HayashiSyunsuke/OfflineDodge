@@ -596,8 +596,8 @@ public class ThirdPersonController : MonoBehaviour
         if (hasAnimator)
         {
             //アニメーターのパラメータにブレンド情報, Input情報を入れる
-            animator.SetFloat(animIDSide, -targetDirection.z, 0.1f, Time.deltaTime);
-            animator.SetFloat(animIDFront, targetDirection.x, 0.1f, Time.deltaTime);
+            animator.SetFloat(animIDFront, -targetDirection.z, 0.1f, Time.deltaTime);
+            animator.SetFloat(animIDSide, -targetDirection.x, 0.1f, Time.deltaTime);
 
             if (!CurrentTarget)
                 animator.SetBool(animIDTarget, false);

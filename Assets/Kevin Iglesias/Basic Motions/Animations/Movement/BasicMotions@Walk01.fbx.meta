@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: bd1c2e9064da28e4fb0fe4a3f6ff4e33
+guid: 0536f044bd409ff419dd726bc69d2676
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
@@ -167,14 +167,14 @@ ModelImporter:
     7400042: BasicMotions@Run01 - Backwards [RM]
     7400044: BasicMotions@Run01 - BackwardsLeft [RM]
     7400046: BasicMotions@Run01 - BackwardsRight [RM]
-    7400048: BasicMotions@Walk01 - Forwards [RM]
-    7400050: BasicMotions@Walk01 - ForwardsLeft [RM]
-    7400052: BasicMotions@Walk01 - ForwardsRight [RM]
-    7400054: BasicMotions@Walk01 - Left [RM]
-    7400056: BasicMotions@Walk01 - Right [RM]
-    7400058: BasicMotions@Walk01 - Backwards [RM]
-    7400060: BasicMotions@Walk01 - BackwardsLeft [RM]
-    7400062: BasicMotions@Walk01 - BackwardsRight [RM]
+    7400048: BasicMotions@Walk01 - Forwards
+    7400050: BasicMotions@Walk01 - ForwardsLeft
+    7400052: BasicMotions@Walk01 - ForwardsRight
+    7400054: BasicMotions@Walk01 - Left
+    7400056: BasicMotions@Walk01 - Right
+    7400058: BasicMotions@Walk01 - Backwards
+    7400060: BasicMotions@Walk01 - BackwardsLeft
+    7400062: BasicMotions@Walk01 - BackwardsRight
     9500000: //RootNode
     2186277476908879412: ImportLogs
   externalObjects: {}
@@ -206,8 +206,8 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: BasicMotions@Walk01 - Forwards [RM]
-      takeName: BasicMotions@Walk01 - Forwards [RM]
+      name: BasicMotions@Walk01 - Forwards
+      takeName: BasicMotions@Walk01 - Forwards
       firstFrame: 0
       lastFrame: 24
       wrapMode: 0
@@ -220,7 +220,7 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
+      loopBlendPositionXZ: 1
       keepOriginalOrientation: 1
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 1
@@ -372,8 +372,8 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: BasicMotions@Walk01 - ForwardsLeft [RM]
-      takeName: BasicMotions@Walk01 - ForwardsLeft [RM]
+      name: BasicMotions@Walk01 - ForwardsLeft
+      takeName: BasicMotions@Walk01 - ForwardsLeft
       firstFrame: 0
       lastFrame: 24
       wrapMode: 0
@@ -386,7 +386,7 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
+      loopBlendPositionXZ: 1
       keepOriginalOrientation: 1
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 1
@@ -538,8 +538,8 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: BasicMotions@Walk01 - ForwardsRight [RM]
-      takeName: BasicMotions@Walk01 - ForwardsRight [RM]
+      name: BasicMotions@Walk01 - ForwardsRight
+      takeName: BasicMotions@Walk01 - ForwardsRight
       firstFrame: 0
       lastFrame: 24
       wrapMode: 0
@@ -552,7 +552,7 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
+      loopBlendPositionXZ: 1
       keepOriginalOrientation: 1
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 1
@@ -704,8 +704,8 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: BasicMotions@Walk01 - Left [RM]
-      takeName: BasicMotions@Walk01 - Left [RM]
+      name: BasicMotions@Walk01 - Left
+      takeName: BasicMotions@Walk01 - Left
       firstFrame: 0
       lastFrame: 24
       wrapMode: 0
@@ -718,7 +718,7 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
+      loopBlendPositionXZ: 1
       keepOriginalOrientation: 1
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 1
@@ -870,8 +870,8 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: BasicMotions@Walk01 - Right [RM]
-      takeName: BasicMotions@Walk01 - Right [RM]
+      name: BasicMotions@Walk01 - Right
+      takeName: BasicMotions@Walk01 - Right
       firstFrame: 0
       lastFrame: 24
       wrapMode: 0
@@ -884,7 +884,7 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
+      loopBlendPositionXZ: 1
       keepOriginalOrientation: 1
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 1
@@ -1036,8 +1036,8 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: BasicMotions@Walk01 - Backwards [RM]
-      takeName: BasicMotions@Walk01 - Backwards [RM]
+      name: BasicMotions@Walk01 - Backwards
+      takeName: BasicMotions@Walk01 - Backwards
       firstFrame: 0
       lastFrame: 24
       wrapMode: 0
@@ -1050,7 +1050,7 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
+      loopBlendPositionXZ: 1
       keepOriginalOrientation: 1
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 1
@@ -1202,8 +1202,8 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: BasicMotions@Walk01 - BackwardsLeft [RM]
-      takeName: BasicMotions@Walk01 - BackwardsLeft [RM]
+      name: BasicMotions@Walk01 - BackwardsLeft
+      takeName: BasicMotions@Walk01 - BackwardsLeft
       firstFrame: 0
       lastFrame: 24
       wrapMode: 0
@@ -1216,7 +1216,7 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
+      loopBlendPositionXZ: 1
       keepOriginalOrientation: 1
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 1
@@ -1368,8 +1368,8 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: BasicMotions@Walk01 - BackwardsRight [RM]
-      takeName: BasicMotions@Walk01 - BackwardsRight [RM]
+      name: BasicMotions@Walk01 - BackwardsRight
+      takeName: BasicMotions@Walk01 - BackwardsRight
       firstFrame: 0
       lastFrame: 24
       wrapMode: 0
@@ -1382,7 +1382,7 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
+      loopBlendPositionXZ: 1
       keepOriginalOrientation: 1
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 1
