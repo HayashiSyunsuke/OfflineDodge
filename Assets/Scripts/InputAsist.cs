@@ -18,7 +18,7 @@ public class InputAsist : MonoBehaviour
 	public bool pass;
 	public bool faint;
 	public bool untarget;
-	public bool talk;
+	public bool returned;
 
 	[Header("Movement Settings")]
 	public bool analogMovement;
@@ -34,9 +34,9 @@ public class InputAsist : MonoBehaviour
 		move = context.ReadValue<Vector2>();
 	}
 
-	public void OnLook(InputAction.CallbackContext context)										
+	public void OnLook(InputAction.CallbackContext context)
 	{
-		if(cursorInputForLook)
+		if (cursorInputForLook)
 		{
 			//LookInput(value.Get<Vector2>());
 			look = context.ReadValue<Vector2>();
@@ -58,40 +58,40 @@ public class InputAsist : MonoBehaviour
 	}
 
 	public void OnThrowing(InputAction.CallbackContext context)
-    {
+	{
 		//ThrowingInput(value.isPressed);
 		throwing = context.ReadValueAsButton();
 		Debug.Log("投げる");
-    }
+	}
 	public void OnLeftArrowState(InputAction.CallbackContext context)
-    {
+	{
 		//LeftArrowInput(value.isPressed);
 		left = context.ReadValueAsButton();
 		Debug.Log("左");
 	}
 	public void OnRightArrowState(InputAction.CallbackContext context)
-    {
+	{
 		//RightArrowInput(value.isPressed);
 		right = context.ReadValueAsButton();
 		Debug.Log("右");
 	}
 	public void OnDodge(InputAction.CallbackContext context)
-    {
+	{
 		dodge = context.ReadValueAsButton();
 		Debug.Log("回避");
-    }
+	}
 
 	public void OnCatch(InputAction.CallbackContext context)
-    {
+	{
 		catching = context.ReadValueAsButton();
 		Debug.Log("キャッチ");
-    }
+	}
 
 	public void OnPass(InputAction.CallbackContext context)
-    {
+	{
 		pass = context.ReadValueAsButton();
 		Debug.Log("パス");
-    }
+	}
 
 	public void OnFaint(InputAction.CallbackContext context)
 	{
@@ -100,14 +100,15 @@ public class InputAsist : MonoBehaviour
 	}
 
 	public void OnUntargeted(InputAction.CallbackContext context)
-    {
-		untarget = context.ReadValueAsButton();
-    }
-
-	public void OnTalk(InputAction.CallbackContext context)
 	{
-		talk = context.ReadValueAsButton();
+		untarget = context.ReadValueAsButton();
 	}
+
+	public void OnReturn(InputAction.CallbackContext context)
+	{
+		returned = context.ReadValueAsButton();
+	}
+
 
 #endif
 	public void MoveInput()
@@ -131,34 +132,34 @@ public class InputAsist : MonoBehaviour
 	}
 
 	public void ThrowingInput()
-    {
+	{
 		//throwing = newThrowState;
-    }
+	}
 	public void LeftArrowInput()
-    {
+	{
 		//left = newLeftArrowState;
-    }
+	}
 	public void RightArrowInput()
-    {
+	{
 		//right = newRightArrowState;
-    }
+	}
 
 	public void DodgeInput()
-    {
+	{
 		//away = newAwayState;
-    }
+	}
 
 	public void CatchInput()
-    {
+	{
 		//catch = newCatchState;
-    }
+	}
 	//private void OnApplicationFocus()
 	//{
-	//	SetCursorState(cursorLocked);
+	//    SetCursorState(cursorLocked);
 	//}
 
-	//private void SetCursorState(bool newState)
-	//{
-	//	Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
-	//}
+	private void SetCursorState(bool newState)
+	{
+		Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
+	}
 }
