@@ -171,6 +171,9 @@ public class ThirdPersonController : MonoBehaviour
     //ボールを投げたか
     private bool Throwed = false;
 
+    [SerializeField]
+    private float hp;
+
     /*-----スキル-----*/
     public CoolTime coolTime;
 
@@ -180,6 +183,7 @@ public class ThirdPersonController : MonoBehaviour
     [SerializeField] private RectTransform rectTransform;
 
     [SerializeField] PlayerCounter playerCounter;
+
 
 #if ENABLE_INPUT_SYSTEM
     private PlayerInput playerInput;
@@ -210,6 +214,9 @@ public class ThirdPersonController : MonoBehaviour
 
     private void Awake()
     {
+        //佐々木が追加
+        GameObject.Find("GameRule").GetComponent<GameRule_>().AddCharacter(this.gameObject);
+
         //メインカメラを取得
         if (mainCamera == null)
         {
@@ -1184,5 +1191,11 @@ public class ThirdPersonController : MonoBehaviour
     public GameObject SetEnemy
     {
         set { enemyGameObject = value; }
+    }
+
+    public float HP
+    {
+        get { return hp; }
+        set { hp = value; }
     }
 }
