@@ -171,8 +171,11 @@ public class ThirdPersonController : MonoBehaviour
     //ボールを投げたか
     private bool Throwed = false;
 
+
     [SerializeField]
     private float hp;
+
+    [SerializeField] private bool m_isOperation;
 
     /*-----スキル-----*/
     public CoolTime coolTime;
@@ -314,20 +317,24 @@ public class ThirdPersonController : MonoBehaviour
 
         JumpAndGravity();
         GroundedCheck();
-        BallCheck();
-        //Attention();
-        NormalMove();
-        TargetMove();
-        Throw();
-        Pass();
-        Faint();
-        Dodge();
-        Catch();
-        //Die();
-        ChangeTargets();
-        ReturnBall();
 
-        ResetPosition();
+        if (m_isOperation)
+        {
+            BallCheck();
+            //Attention();
+            NormalMove();
+            TargetMove();
+            Throw();
+            Pass();
+            Faint();
+            Dodge();
+            Catch();
+            //Die();
+            ChangeTargets();
+            ReturnBall();
+
+            ResetPosition();
+        }
     }
 
     private void LateUpdate()
@@ -1197,5 +1204,11 @@ public class ThirdPersonController : MonoBehaviour
     {
         get { return hp; }
         set { hp = value; }
+    }
+
+    public bool IsOperation
+    {
+        get { return m_isOperation; }
+        set { m_isOperation = value; }
     }
 }
