@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class GameRule_ : MonoBehaviour
+public class GameRule : MonoBehaviour
 {
 
     [SerializeField]
     private List<GameObject> m_listPlayerData;
     [SerializeField]
     private List<GameObject> m_listSpawnPoints;
+    [SerializeField]
+    private PlayerCounter m_playerCounter;
 
     [SerializeField]
     private int m_roundNum;                 //ラウンド数
@@ -47,25 +49,33 @@ public class GameRule_ : MonoBehaviour
     {
         m_timer = START_TIME;
         m_startFlag = true;
+        m_reset = true;
     }
 
     void FixedUpdate()
     {
-        JudgmentOfWin();
+        if (m_playerCounter.PlayerNum >= 2)
+        {
+            JudgmentOfWin();
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(m_startFlag)
-        StartRound();
-
-        if (m_reset)
+        if (m_playerCounter.PlayerNum >= 2)
         {
-            ResetPosition();
-            //m_startFlag = true;
+            if (m_startFlag)
+                StartRound();
+
+       
+            if (m_reset)
+            {
+                ResetPosition();
+                //m_startFlag = true;
+            }
         }
-            
+     
     }
 
     //キャラクターをリストに登録する
@@ -82,10 +92,10 @@ public class GameRule_ : MonoBehaviour
 
         foreach (GameObject player in m_listPlayerData)
         {
-            if (player.layer == 8)
+            if (player.layer == 13)
                 red += player.GetComponent<ThirdPersonController>().HP;
 
-            if (player.layer == 9)
+            if (player.layer == 14)
                 blue += player.GetComponent<ThirdPersonController>().HP;
 
         }
@@ -173,7 +183,7 @@ public class GameRule_ : MonoBehaviour
     //位置をリセットする　対象： プレイヤー ＆ ボール
     public void ResetPosition()
     {
-        bool[] check = { false, false, false, false };
+        bool[] check = { false, false };
 
         //チーム別で位置を初期化する
         foreach (GameObject player in m_listPlayerData)

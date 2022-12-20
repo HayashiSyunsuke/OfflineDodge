@@ -218,7 +218,7 @@ public class ThirdPersonController : MonoBehaviour
     private void Awake()
     {
         //²X–Ø‚ª’Ç‰Á
-        GameObject.Find("GameRule").GetComponent<GameRule_>().AddCharacter(this.gameObject);
+        GameObject.Find("GameRule").GetComponent<GameRule>().AddCharacter(this.gameObject);
 
         //ƒƒCƒ“ƒJƒƒ‰‚ğæ“¾
         if (mainCamera == null)
@@ -240,7 +240,7 @@ public class ThirdPersonController : MonoBehaviour
 
                 camera.cullingMask = ~(1 << 14);
 
-                rectTransform.localPosition = new Vector2(-480f, 0f);
+                //rectTransform.localPosition = new Vector2(-480f, 0f);
 
                 playerNumber = 1;
 
@@ -253,7 +253,7 @@ public class ThirdPersonController : MonoBehaviour
 
                 camera.cullingMask = ~(1 << 13);
 
-                rectTransform.localPosition = new Vector2(480f, 0f);
+                //rectTransform.localPosition = new Vector2(480f, 0f);
 
                 GameObject p1 = GameObject.Find("FemaleDummy1");
                 GameObject p2 = GameObject.Find("FemaleDummy2");
@@ -269,13 +269,13 @@ public class ThirdPersonController : MonoBehaviour
 
         if (playerNumber == 1)
         {
-            controller.Move(new Vector3(0f, 0f, 3f));
+            //controller.Move(new Vector3(0f, 0f, 3f));
         }
         else
         {
             GameObject mr = GameObject.Find("Movement Restrictions");
             mr.SetActive(false);
-            controller.Move(new Vector3(0f, 0f, -50f));
+            //controller.Move(new Vector3(0f, 0f, -50f));
             mr.SetActive(true);
         }
     }
