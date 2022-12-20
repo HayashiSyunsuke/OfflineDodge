@@ -8,6 +8,7 @@ public class HPGauge: MonoBehaviour
     [SerializeField]
     Image hp;
 
+    //–ƒLƒƒƒ‰‚ÌHP‚É•ÏX‚·‚é–
     //[SerializeField]
     //private CharacterHP characterHP;
 

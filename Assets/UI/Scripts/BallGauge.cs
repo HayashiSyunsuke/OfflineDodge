@@ -26,8 +26,8 @@ public class BallGauge : MonoBehaviour
     private void Start()
     {
         // •ÏX‰ÓŠ@user[„‡‚¤‚â‚Â
-        var players = GameObject.FindGameObjectsWithTag("user");
-        player = players[1].GetComponent<ThirdPersonController>();
+        //var players = GameObject.FindGameObjectsWithTag("user");
+        //player = players[1].GetComponent<ThirdPersonController>();
 
         image = this.GetComponent<Image>();
     }
@@ -37,6 +37,7 @@ public class BallGauge : MonoBehaviour
     {
         totalTime = Time.time;
 
+        /*
         if (player.IsBallHaving)
         {
             //ˆê‰ñ‚¾‚¯
@@ -62,6 +63,7 @@ public class BallGauge : MonoBehaviour
             SetFillAmount();
             timer = 10.0f;
         }
+        */
     }
 
 
