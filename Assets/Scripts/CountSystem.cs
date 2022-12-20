@@ -18,7 +18,7 @@ public class CountSystem : MonoBehaviour
     private float CountTime = 2.0f;
 
     [SerializeField]
-    private GameRule_ m_gameRule;
+    private GameRule m_gameRule;
 
     private bool m_end = false;
 
