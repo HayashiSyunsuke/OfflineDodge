@@ -12,6 +12,10 @@ public class GameRule : MonoBehaviour
     private List<GameObject> m_listSpawnPoints;
     [SerializeField]
     private PlayerCounter m_playerCounter;
+    [SerializeField]
+    private GameObject m_stanbyScene;
+    [SerializeField]
+    private GameObject m_stanbyCamera;
 
     [SerializeField]
     private int m_roundNum;                 //ÉâÉEÉìÉhêî
@@ -213,6 +217,12 @@ public class GameRule : MonoBehaviour
 
     public void StartRound()
     {
+        if (m_stanbyScene.activeSelf)
+            m_stanbyScene.SetActive(false);
+
+        if (m_stanbyCamera.activeSelf)
+            m_stanbyCamera.SetActive(false);
+
         m_timer -= Time.deltaTime;
 
         m_countSystem.CountDown();
