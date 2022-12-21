@@ -8,6 +8,10 @@ TagManager:
   - Ball1
   - RightHand
   - Enemy
+  - 2PJoinUI
+  - StandbyObject
+  - 1PJoinUI
+  - PlayerCanvas
   layers:
   - Default
   - TransparentFX

@@ -228,10 +228,10 @@ RectTransform:
   m_Father: {fileID: 1747096313549599864}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 1920, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &3208376712189449488
 Canvas:
@@ -308,7 +308,7 @@ GameObject:
   - component: {fileID: 2611166630117623924}
   m_Layer: 10
   m_Name: Canvas
-  m_TagString: Untagged
+  m_TagString: PlayerCanvas
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1689,6 +1689,9 @@ MonoBehaviour:
   BottomClamp: -30
   CameraAngleOverride: 0
   LockCameraPosition: 0
+  hp: 0
+  m_isOperation: 0
+  canvas: {fileID: 1899832825212074381}
   coolTime: {fileID: 5111808918823008094}
   camera: {fileID: 750160814403629903}
   virtualCamera: {fileID: 3061301250554519156}

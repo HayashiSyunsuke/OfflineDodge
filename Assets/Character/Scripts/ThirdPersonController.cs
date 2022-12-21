@@ -178,6 +178,8 @@ public class ThirdPersonController : MonoBehaviour
     [SerializeField] private bool m_isOperation;
 
     /*-----ÉXÉLÉã-----*/
+    [SerializeField] private GameObject canvas;
+
     public CoolTime coolTime;
 
     [SerializeField] private Camera camera;
@@ -232,7 +234,8 @@ public class ThirdPersonController : MonoBehaviour
             playerCounter.PlayerNum++;
 
             this.gameObject.name = "FemaleDummy" + playerCounter.PlayerNum;
-
+            GameObject.FindWithTag("PlayerCanvas").SetActive(false);
+            
             if (playerCounter.PlayerNum == 1)
             {
                 this.gameObject.layer = 13;
@@ -240,7 +243,7 @@ public class ThirdPersonController : MonoBehaviour
 
                 camera.cullingMask = ~(1 << 14);
 
-                //rectTransform.localPosition = new Vector2(-480f, 0f);
+                rectTransform.localPosition = new Vector2(-480f, 0f);
 
                 playerNumber = 1;
 
@@ -253,7 +256,7 @@ public class ThirdPersonController : MonoBehaviour
 
                 camera.cullingMask = ~(1 << 13);
 
-                //rectTransform.localPosition = new Vector2(480f, 0f);
+                rectTransform.localPosition = new Vector2(480f, 0f);
 
                 GameObject p1 = GameObject.Find("FemaleDummy1");
                 GameObject p2 = GameObject.Find("FemaleDummy2");
@@ -270,6 +273,8 @@ public class ThirdPersonController : MonoBehaviour
         if (playerNumber == 1)
         {
             //controller.Move(new Vector3(0f, 0f, 3f));
+            GameObject.FindWithTag("1PJoinUI").GetComponent<CharanterJoinUI>().JoinFlag = true;
+            GameObject.Find("P1_Text").SetActive(false);
         }
         else
         {
@@ -277,6 +282,9 @@ public class ThirdPersonController : MonoBehaviour
             mr.SetActive(false);
             //controller.Move(new Vector3(0f, 0f, -50f));
             mr.SetActive(true);
+            GameObject.FindWithTag("2PJoinUI").GetComponent<CharanterJoinUI>().JoinFlag = true;
+            GameObject.Find("2P_Text").SetActive(false);
+
         }
     }
 
@@ -320,6 +328,7 @@ public class ThirdPersonController : MonoBehaviour
 
         if (m_isOperation)
         {
+            CreateCanvas();
             BallCheck();
             //Attention();
             NormalMove();
@@ -1161,6 +1170,12 @@ public class ThirdPersonController : MonoBehaviour
             verticalVelocity = 0f;
             controller.Move(new Vector3(0f, 55f, 0f));
         }
+    }
+
+    private void CreateCanvas()
+    {
+        //GameObject canvas = this.transform.root.f;
+        canvas.gameObject.SetActive(true);
     }
 
 
