@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.43718287, g: 0.75442564, b: 1.0290014, a: 1}
+  m_IndirectSpecularColor: {r: 0.43726084, g: 0.75450844, b: 1.0290486, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2273,6 +2273,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3166849ca4e38c244a41dfd78291094d, type: 3}
+--- !u!1 &252560528 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6441337028518844308, guid: 62edb3f5d215caa4387266b5ed14a05f, type: 3}
+  m_PrefabInstance: {fileID: 843808183}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &254542855 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 30149104ac1b4a147b5ef28255878f9f, type: 3}
@@ -9419,7 +9424,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6441337028518844308, guid: 62edb3f5d215caa4387266b5ed14a05f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6441337028834965366, guid: 62edb3f5d215caa4387266b5ed14a05f, type: 3}
       propertyPath: m_Sprite
@@ -18297,6 +18302,8 @@ MonoBehaviour:
   - {fileID: 1480263533}
   - {fileID: 806898586}
   m_playerCounter: {fileID: 1985954966}
+  m_stanbyScene: {fileID: 252560528}
+  m_stanbyCamera: {fileID: 101405966}
   m_roundNum: 2
   m_redTeamCurrentRounds: 0
   m_blueTeamCurrentRounds: 0
