@@ -55,7 +55,7 @@ public class CountSystem : MonoBehaviour
                 m_startImage.gameObject.SetActive(false);
                 m_end = true;
             }
-                
+
         }
         else
         {
@@ -63,14 +63,30 @@ public class CountSystem : MonoBehaviour
 
             m_startImage.gameObject.SetActive(false);
 
-            foreach (Image image in m_numbersImage)
+            if (time <= 3)
             {
-                image.gameObject.SetActive(false);
+                if (time <= 1)
+                {
+                    m_numbersImage[0].gameObject.SetActive(true);
+                    m_numbersImage[1].gameObject.SetActive(false);
+                    m_numbersImage[2].gameObject.SetActive(false);
+                }
+                else if (time <= 2)
+                {
+                    m_numbersImage[1].gameObject.SetActive(true);
+                    m_numbersImage[2].gameObject.SetActive(false);
+                    m_numbersImage[0].gameObject.SetActive(false);
+                }
+                else if (time <= 3)
+                {
+                    m_numbersImage[2].gameObject.SetActive(true);
+                    m_numbersImage[1].gameObject.SetActive(false);
+                    m_numbersImage[0].gameObject.SetActive(false);
+                }
+
             }
-
-            m_numbersImage[time - 1].gameObject.SetActive(true);
-
         }
+
     }
 
     public void ResetCount()
