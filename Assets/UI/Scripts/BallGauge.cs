@@ -7,12 +7,17 @@ public class BallGauge : MonoBehaviour
 {
 
     [SerializeField]
-    private ThirdPersonController player;
+    private ThirdPersonController player = null;
 
     [SerializeField]
     private Image image;
 
+    private PlayerCounter playerCounter;
+
+    GameObject child;
+
     private bool ones = true;
+    private bool timerOnes = true;
 
     private float totalTime;
     private float oldSeconds;
@@ -29,22 +34,45 @@ public class BallGauge : MonoBehaviour
         //var players = GameObject.FindGameObjectsWithTag("user");
         //player = players[1].GetComponent<ThirdPersonController>();
 
-        image = this.GetComponent<Image>();
+        if (image == null)
+        {
+            image = this.GetComponent<Image>();
+        }
+        if (playerCounter == null)
+        {
+            playerCounter = GameObject.Find("PlayerManager").GetComponent<PlayerCounter>();
+        }
+
+        child = transform.GetChild(0).gameObject;
     }
+
 
     // Update is called once per frame
     void Update()
     {
+        if (playerCounter.PlayerNum < 2)
+            return;
+
+        if (ones)
+        {
+            if (child.name == "Left")
+                player = GameObject.Find("FemaleDummy1").GetComponent<ThirdPersonController>();
+            if (child.name == "Right")
+                player = GameObject.Find("FemaleDummy2").GetComponent<ThirdPersonController>();
+
+            ones = false;
+        }
+
         totalTime = Time.time;
 
-        /*
+
         if (player.IsBallHaving)
         {
             //ˆê‰ñ‚¾‚¯
-            if (ones)
+            if (timerOnes)
             {
                 oldSeconds = Time.time;
-                ones = false;
+                timerOnes = false;
             }
 
             if (timer > 0)
@@ -57,13 +85,13 @@ public class BallGauge : MonoBehaviour
         }
         else
         {
-            ones = true;
+            timerOnes = true;
             parcent = Mathf.Lerp(image.fillAmount, (maxCount / 4) * 3, Time.deltaTime);
             //parcent = Mathf.SmoothStep(image.fillAmount, (maxCount / 4) * 3, Time.deltaTime * 15);
             SetFillAmount();
             timer = 10.0f;
         }
-        */
+
     }
 
 
