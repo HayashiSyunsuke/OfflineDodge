@@ -16,6 +16,12 @@ public class GameRule : MonoBehaviour
     private GameObject m_stanbyScene;
     [SerializeField]
     private GameObject m_stanbyCamera;
+    [SerializeField]
+    private GameObject m_playerUICanvas;
+    [SerializeField]
+    private float m_sceneTimer;
+    [SerializeField]
+    private float ChangeSceneTime = 2;
 
     [SerializeField]
     private int m_roundNum;                 //ラウンド数
@@ -28,7 +34,7 @@ public class GameRule : MonoBehaviour
     private bool m_blueTeamWin = false;     //ブルーチームの勝利
 
     [SerializeField]
-    private bool m_reset = false;
+    private bool m_resetFlag = false;
 
     [SerializeField]
     private float m_timer;
@@ -52,34 +58,57 @@ public class GameRule : MonoBehaviour
     void Start()
     {
         m_timer = START_TIME;
+        m_sceneTimer = ChangeSceneTime;
         m_startFlag = true;
-        m_reset = true;
+        m_resetFlag = true;
+        m_playerUICanvas.SetActive(false);
+        m_stanbyScene.SetActive(true);
+        m_stanbyCamera.SetActive(true);
     }
 
     void FixedUpdate()
     {
-        if (m_playerCounter.PlayerNum >= 2)
-        {
-            JudgmentOfWin();
-        }
+        //プレイヤーが２人より少なければ return する
+        if (m_playerCounter.PlayerNum < 2)
+            return;
+
+        //勝敗を判定する
+        JudgmentOfWin();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (m_playerCounter.PlayerNum >= 2)
-        {
-            if (m_startFlag)
-                StartRound();
+        //プレイヤーが２人より少なければ return する
+        if (m_playerCounter.PlayerNum < 2)
+            return;
 
-       
-            if (m_reset)
-            {
-                ResetPosition();
-                //m_startFlag = true;
-            }
-        }
-     
+        if (m_sceneTimer >= 0.0f)
+            m_sceneTimer -= Time.deltaTime;
+
+        if (m_sceneTimer > 0.0f)
+            return;
+
+        //アクティブ状態なら非アクティブにする
+        if (!m_playerUICanvas.activeSelf)
+            m_playerUICanvas.SetActive(true);
+
+        //アクティブ状態なら非アクティブにする
+        if (m_stanbyScene.activeSelf)
+            m_stanbyScene.SetActive(false);
+
+        //アクティブ状態なら非アクティブにする
+        if (m_stanbyCamera.activeSelf)
+            m_stanbyCamera.SetActive(false);
+
+        //スタートフラグがTrueの時にラウンドをスタートする
+        if (m_startFlag)
+            StartRound();
+               
+       //リセットフラグがTrueの時にポジションをリセットする
+        if (m_resetFlag)
+            ResetPosition();
+
     }
 
     //キャラクターをリストに登録する
@@ -128,6 +157,7 @@ public class GameRule : MonoBehaviour
 
     private void RoundUpdate()
     {
+        //ラウンドの数を減らす
         m_roundNum--;
 
         if (m_redTeamWin)
@@ -148,7 +178,7 @@ public class GameRule : MonoBehaviour
         m_redTeamWin = false;
         m_blueTeamWin = false;
 
-        m_reset = true;
+        //m_reset = true;
 
     }
 
@@ -212,25 +242,19 @@ public class GameRule : MonoBehaviour
         //GameObject.FindWithTag("Ball1").GetComponent<Ball>().ResetPosition();
 
         //フラグのリセット
-        m_reset = false;
+        m_resetFlag = false;
     }
 
     public void StartRound()
     {
-        if (m_stanbyScene.activeSelf)
-            m_stanbyScene.SetActive(false);
-
-        if (m_stanbyCamera.activeSelf)
-            m_stanbyCamera.SetActive(false);
-
         m_timer -= Time.deltaTime;
 
         m_countSystem.CountDown();
 
-        if (!m_reset)
-            m_reset = true;
+        if (!m_resetFlag)
+            m_resetFlag = true;
         else
-            m_reset = false;
+            m_resetFlag = false;
 
         //チーム別で位置を初期化する
         foreach (GameObject player in m_listPlayerData)
