@@ -1674,7 +1674,7 @@ MonoBehaviour:
   BallLayers:
     serializedVersion: 2
     m_Bits: 2048
-  rightHandGameObject: {fileID: 0}
+  rightHandGameObject: {fileID: 5733766154654010387}
   playerDirection: {x: -0.22173768, y: 0, z: 0.97510636}
   BallLayerNumber: 11
   Throwing: 0
@@ -1689,7 +1689,7 @@ MonoBehaviour:
   BottomClamp: -30
   CameraAngleOverride: 0
   LockCameraPosition: 0
-  hp: 0
+  hp: 100
   m_isOperation: 0
   canvas: {fileID: 1899832825212074381}
   coolTime: {fileID: 5111808918823008094}

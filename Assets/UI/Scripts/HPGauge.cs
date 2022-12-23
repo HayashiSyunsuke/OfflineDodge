@@ -90,11 +90,11 @@ public class HPGauge : MonoBehaviour
         if (playerCounter.PlayerNum < 2)
             return;
 
-        if (player.HP <= 0)
-        {
+        //if (player.HP <= 0)
+        //{
             //GetComponentInParent<ChangeScene>().ChangeFlag = true;
-            return;
-        }
+            //return;
+        //}
     }
 
     //c‚èHP‚ÅF‚ğ•Ï‚¦‚é

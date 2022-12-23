@@ -18,7 +18,7 @@ public class Ball : MonoBehaviour
     [SerializeField]
     private float m_passAngle;              //パスをする際のボール飛ぶ角度
     [SerializeField]
-    private Vector3 m_ballSpawnPoint;         //ボールの初期位置
+    private Transform m_ballSpawnPoint;         //ボールの初期位置
     [SerializeField]
     private float m_ballPower = 0;          //ボールの加速量
     [SerializeField]
@@ -156,7 +156,7 @@ public class Ball : MonoBehaviour
     public void ResetPosition()
     {
         m_rigidbody.velocity = Vector3.zero;                        //速度の初期化
-        this.transform.position = m_ballSpawnPoint;                 //位置の初期化
+        this.transform.position = m_ballSpawnPoint.position;        //位置の初期化
         this.transform.rotation = Quaternion.identity;              //回転軸の初期化
     }
 

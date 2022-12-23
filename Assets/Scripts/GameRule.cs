@@ -22,6 +22,8 @@ public class GameRule : MonoBehaviour
     private float m_sceneTimer;
     [SerializeField]
     private float ChangeSceneTime = 2;
+    [SerializeField]
+    private Ball m_ball;
 
     [SerializeField]
     private int m_roundNum;                 //ラウンド数
@@ -64,6 +66,7 @@ public class GameRule : MonoBehaviour
         m_playerUICanvas.SetActive(false);
         m_stanbyScene.SetActive(true);
         m_stanbyCamera.SetActive(true);
+        m_ball.UseGravity = false;
     }
 
     void FixedUpdate()
@@ -107,7 +110,17 @@ public class GameRule : MonoBehaviour
                
        //リセットフラグがTrueの時にポジションをリセットする
         if (m_resetFlag)
+        {
+            //ボールに重力を加える
+            if (!m_ball.UseGravity)
+                m_ball.UseGravity = true;
+
+            //ボールの位置をリセットする
+            m_ball.ResetPosition();
+            //プレイヤーの位置をリセットする
             ResetPosition();
+        }
+            
 
     }
 
@@ -217,6 +230,7 @@ public class GameRule : MonoBehaviour
     //位置をリセットする　対象： プレイヤー ＆ ボール
     public void ResetPosition()
     {
+
         bool[] check = { false, false };
 
         //チーム別で位置を初期化する
@@ -251,11 +265,6 @@ public class GameRule : MonoBehaviour
 
         m_countSystem.CountDown();
 
-        if (!m_resetFlag)
-            m_resetFlag = true;
-        else
-            m_resetFlag = false;
-
         //チーム別で位置を初期化する
         foreach (GameObject player in m_listPlayerData)
         {
@@ -275,7 +284,7 @@ public class GameRule : MonoBehaviour
             }
         }
 
-        Debug.Log("現在のタイマー"+　m_timer);
+        //Debug.Log("現在のタイマー"+　m_timer);
 
         
     }
