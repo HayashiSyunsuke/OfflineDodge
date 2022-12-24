@@ -12,6 +12,7 @@ TagManager:
   - StandbyObject
   - 1PJoinUI
   - PlayerCanvas
+  - Floor
   layers:
   - Default
   - TransparentFX

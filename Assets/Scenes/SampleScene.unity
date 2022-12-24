@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.43718287, g: 0.75442564, b: 1.0290014, a: 1}
+  m_IndirectSpecularColor: {r: 0.43726084, g: 0.75450844, b: 1.0290486, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -12020,7 +12020,7 @@ GameObject:
   - component: {fileID: 1085529777}
   m_Layer: 0
   m_Name: Stages
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12371,6 +12371,25 @@ PrefabInstance:
       objectReference: {fileID: 9100000, guid: a4b7aec88eb49a04a910e6ed93fab0c5, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6bb21c30fea3b4842853c22f8710c250, type: 3}
+--- !u!1 &1119025950 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 30149104ac1b4a147b5ef28255878f9f, type: 3}
+  m_PrefabInstance: {fileID: 1226841631}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &1119025953
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1119025950}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1130871231 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 5591eb1e0860ab344a0e6dc3937b1c1c, type: 3}
@@ -13666,23 +13685,23 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 30149104ac1b4a147b5ef28255878f9f, type: 3}
       propertyPath: m_RootOrder
-      value: 15
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 30149104ac1b4a147b5ef28255878f9f, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.46286
+      value: 1.3915977
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 30149104ac1b4a147b5ef28255878f9f, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.76862
+      value: 2.3958066
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 30149104ac1b4a147b5ef28255878f9f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.000000081956
+      value: -0.000000052154
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 30149104ac1b4a147b5ef28255878f9f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 30149104ac1b4a147b5ef28255878f9f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -13724,13 +13743,21 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: a47639985438b5f4d8d176c7190f05b2, type: 2}
+    - target: {fileID: -5754084199372789682, guid: 30149104ac1b4a147b5ef28255878f9f, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
     - target: {fileID: 919132149155446097, guid: 30149104ac1b4a147b5ef28255878f9f, type: 3}
       propertyPath: m_Name
       value: Ground_Mesh
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 30149104ac1b4a147b5ef28255878f9f, type: 3}
+      propertyPath: m_TagString
+      value: Floor
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 30149104ac1b4a147b5ef28255878f9f, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 30149104ac1b4a147b5ef28255878f9f, type: 3}

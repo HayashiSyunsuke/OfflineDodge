@@ -323,7 +323,7 @@
                 {
                     "name": "",
                     "id": "e7c3d316-d8de-4e9c-b4e3-5378826d3fb4",
-                    "path": "<Gamepad>/rightShoulder",
+                    "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -371,6 +371,17 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",
+                    "action": "Feint",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ffbe8d81-8a78-48c5-bf8e-5317b5e261b2",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
                     "action": "Feint",
                     "isComposite": false,
                     "isPartOfComposite": false

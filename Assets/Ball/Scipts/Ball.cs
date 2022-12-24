@@ -40,7 +40,7 @@ public class Ball : MonoBehaviour
     private LayerMask m_teamLayer;
 
     //当たり判定の有無
-    private bool m_hitValidity = true;
+    [SerializeField] private bool m_hitValidity = true;
     private bool m_hit = false;
 
     //sound
@@ -141,15 +141,15 @@ public class Ball : MonoBehaviour
                 //characterHp.DeadFlag = true;
             }
 
-            //ヒット時のエフェクトを表示する
-            if (tpc.Dieing)
-            {
-                m_effectManager.DeadParticle(this.gameObject.transform.position);
-            }
-            else
-            {
-                m_effectManager.HitParticle(this.gameObject.transform.position);
-            }
+            ////ヒット時のエフェクトを表示する
+            //if (tpc.Dieing)
+            //{
+            //    m_effectManager.DeadParticle(this.gameObject.transform.position);
+            //}
+            //else
+            //{
+            //    m_effectManager.HitParticle(this.gameObject.transform.position);
+            //}
         }
     }
 

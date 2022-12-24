@@ -638,7 +638,7 @@ public class ThirdPersonController : MonoBehaviour
     private void JumpAndGravity()
     {
         //地面と接地している場合
-        if (Grounded && !CurrentTarget)
+        if (Grounded)
         {
             // fallTimeoutTimerをリセットする
             fallTimeoutDelta = FallTimeout;
@@ -657,7 +657,7 @@ public class ThirdPersonController : MonoBehaviour
             }
 
             // ジャンプする場合
-            if (input.jump && jumpTimeoutDelta <= 0.0f && !Throwing && !Fainting && !Dodging && !Catching)
+            if (input.jump && jumpTimeoutDelta <= 0.0f && !Throwing && !Fainting && !Dodging && !Catching && !CurrentTarget)
             {
                 //  H * -2 * G = 望みの高さに到達するために必要な速度
                 verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
@@ -734,7 +734,7 @@ public class ThirdPersonController : MonoBehaviour
             {
                 ball.gameObject.transform.parent = null;
                 ball.GetComponent<Rigidbody>().isKinematic = false;
-
+                ball.GetComponent<Ball>().CheckLayer(this.gameObject.layer);
                 ball.GetComponent<Ball>().Straight(transform.forward);
                 isBallHaving = false;
                 Throwed = true;
