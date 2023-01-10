@@ -735,6 +735,7 @@ public class ThirdPersonController : MonoBehaviour
                 ball.gameObject.transform.parent = null;
                 ball.GetComponent<Rigidbody>().isKinematic = false;
                 ball.GetComponent<Ball>().CheckLayer(this.gameObject.layer);
+                ball.GetComponent<Ball>().CheckThrowObject(this.gameObject);
                 ball.GetComponent<Ball>().Straight(transform.forward);
                 isBallHaving = false;
                 Throwed = true;
