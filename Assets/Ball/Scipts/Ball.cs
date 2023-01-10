@@ -29,6 +29,8 @@ public class Ball : MonoBehaviour
     private float m_accelerationValueMax;   //加速値最大値
     [SerializeField]
     private int m_damage;
+    [SerializeField]
+    private GameObject m_throwObject;
 
     //エフェクト関連
     private ParticleSystem m_particle;
@@ -111,7 +113,12 @@ public class Ball : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (m_throwObject == collision.gameObject)
+            return;
+
         m_useGravity = true;
+        ResetThrowObject();
+
         audioSource.PlayOneShot(BoundAudioClip, BoundSoundVolume);
 
         var tpc = collision.gameObject.GetComponent<ThirdPersonController>();
@@ -168,6 +175,16 @@ public class Ball : MonoBehaviour
     public void ResetLayer()
     {
         m_teamLayer = 0;
+    }
+
+    public void CheckThrowObject(GameObject obj)
+    {
+        m_throwObject = obj;
+    }
+
+    public void ResetThrowObject()
+    {
+        m_throwObject = null;
     }
 
     public Vector3 Gravity
