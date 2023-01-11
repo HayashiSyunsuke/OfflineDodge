@@ -737,8 +737,13 @@ public class ThirdPersonController : MonoBehaviour
                 ball.GetComponent<Ball>().CheckLayer(this.gameObject.layer);
                 ball.GetComponent<Ball>().CheckThrowObject(this.gameObject);
                 ball.GetComponent<Ball>().Straight(transform.forward);
+                ball.GetComponent<Ball>().CollisionNullification(); //当たり判定を一時的に消す
                 isBallHaving = false;
                 Throwed = true;
+            }
+            if(throwTimeoutDelta <= 0.9f)
+            {
+                ball.GetComponent<Ball>().CollisionValidation(); //当たり判定を元に戻す
             }
 
             //投げるデルタタイムが残っていたら減らす
@@ -754,6 +759,8 @@ public class ThirdPersonController : MonoBehaviour
                     Throwing = false;
                     //アニメーターのパラメータに投げる情報を入れる
                     animator.SetBool(animIDThrow, Throwing);
+
+                    
                 }
             }
         }
@@ -1053,11 +1060,13 @@ public class ThirdPersonController : MonoBehaviour
         ball.GetComponent<Rigidbody>().isKinematic = true;
         ball.GetComponent<Rigidbody>().useGravity = false;
         ball.GetComponent<Ball>().UseGravity = false;
+        ball.GetComponent<Ball>().HitValidity = true;
         Transform rightHand = rightHandGameObject.transform;//GameObject.FindWithTag("RightHand").transform;
         ballPosition.position = rightHand.position;
         ball.transform.parent = rightHand;
         isBallHaving = true;
         audioSource.PlayOneShot(CatchAudioClip, CatchAudioVolume);
+
     }
 
     /// <summary>

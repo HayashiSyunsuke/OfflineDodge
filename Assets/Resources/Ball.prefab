@@ -186,6 +186,7 @@ Transform:
   m_LocalScale: {x: 4, y: 4, z: 4}
   m_Children:
   - {fileID: 2012476117736732253}
+  - {fileID: 3886011938584640751}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -279,6 +280,8 @@ MonoBehaviour:
   m_decelerationValue: 0.2
   m_accelerationValueMax: 15
   m_damage: 0
+  m_throwObject: {fileID: 0}
+  m_hitValidity: 1
   audioSource: {fileID: 0}
   BoundAudioClip: {fileID: 0}
   BoundSoundVolume: 0
@@ -309,3 +312,47 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_hitParticle: {fileID: 0}
   m_deadParticle: {fileID: 0}
+--- !u!1 &7172258744332682189
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3886011938584640751}
+  - component: {fileID: 8817634863498357483}
+  m_Layer: 15
+  m_Name: Sphere
+  m_TagString: Ball1
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3886011938584640751
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7172258744332682189}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.12793, y: 0.12793, z: 0.12793}
+  m_Children: []
+  m_Father: {fileID: 2012476118177677616}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &8817634863498357483
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7172258744332682189}
+  m_Material: {fileID: 13400000, guid: 429e405b5dd690e44a82808f9cf8325f, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}

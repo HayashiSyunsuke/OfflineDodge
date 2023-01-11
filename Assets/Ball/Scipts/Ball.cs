@@ -187,6 +187,16 @@ public class Ball : MonoBehaviour
         m_throwObject = null;
     }
 
+    public void CollisionNullification()
+    {
+        gameObject.GetComponent<SphereCollider>().enabled = false;
+    }
+
+    public void CollisionValidation()
+    {
+        gameObject.GetComponent<SphereCollider>().enabled = true;
+    }
+
     public Vector3 Gravity
     {
         get { return m_localGravity; }
