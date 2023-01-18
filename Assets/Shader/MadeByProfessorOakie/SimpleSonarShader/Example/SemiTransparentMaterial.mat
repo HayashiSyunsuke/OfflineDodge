@@ -20,7 +20,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: f65dbae42855c024e9d28f328f1912d0, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _RingTex:
@@ -35,6 +35,6 @@ Material:
     - _RingSpeed: 5
     - _RingWidth: 1
     m_Colors:
-    - _Color: {r: 0.5660378, g: 0.2110788, b: 0, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _RingColor: {r: 0.22075468, g: 0.9277483, b: 1, a: 1}
   m_BuildTextureStacks: []
