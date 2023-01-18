@@ -274,7 +274,7 @@ public class ThirdPersonController : MonoBehaviour
         {
             //controller.Move(new Vector3(0f, 0f, 3f));
             GameObject.FindWithTag("1PJoinUI").GetComponent<CharanterJoinUI>().JoinFlag = true;
-            GameObject.Find("P1_Text").SetActive(false);
+            //GameObject.Find("P1_Text").SetActive(false);
         }
         else
         {
@@ -283,7 +283,7 @@ public class ThirdPersonController : MonoBehaviour
             //controller.Move(new Vector3(0f, 0f, -50f));
             mr.SetActive(true);
             GameObject.FindWithTag("2PJoinUI").GetComponent<CharanterJoinUI>().JoinFlag = true;
-            GameObject.Find("2P_Text").SetActive(false);
+            //GameObject.Find("2P_Text").SetActive(false);
 
         }
     }
