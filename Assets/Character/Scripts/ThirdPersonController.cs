@@ -349,6 +349,7 @@ public class ThirdPersonController : MonoBehaviour
     private void LateUpdate()
     {
         CameraRotation();
+        TargetCameraRotation();
     }
 
     private void AssignAnimationIDs()
@@ -446,6 +447,34 @@ public class ThirdPersonController : MonoBehaviour
         CinemachineCameraTarget.transform.rotation = Quaternion.Euler(cinemachineTargetPitch + CameraAngleOverride,
             cinemachineTargetYaw, 0.0f);
     }
+
+    private void TargetCameraRotation()
+    {
+        if (CurrentTarget == null) return;
+
+        targetRotation = Mathf.Atan2(CurrentTarget.transform.position.x - transform.position.x, CurrentTarget.transform.position.z - transform.position.z) * Mathf.Rad2Deg;
+
+        float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref rotationVelocity, RotationSmoothTime);
+
+        if (cinemachineTargetPitch < 0)
+        {
+            cinemachineTargetPitch += 1f;
+        }
+        else if (cinemachineTargetPitch > 0)
+        {
+            cinemachineTargetPitch -= 1f;
+        }
+
+        if (cinemachineTargetPitch <= 1f && cinemachineTargetPitch >= -1f)
+        {
+            cinemachineTargetPitch = 0f;
+        }
+
+        CinemachineCameraTarget.transform.rotation = Quaternion.Euler(new Vector3(cinemachineTargetPitch, rotation, 0.0f));
+
+        cinemachineTargetYaw = rotation;
+    }
+
 
     /// <summary>
     /// í èÌèÛë‘ÇÃà⁄ìÆ
@@ -791,7 +820,7 @@ public class ThirdPersonController : MonoBehaviour
     /// </summary>
     private void Dodge()
     {
-        //tr.emitting = Dodging;
+        if (CurrentTarget != null) return;
 
         if (!coolTime.CoolTimeFlag)
         {
