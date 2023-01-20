@@ -171,6 +171,8 @@ public class ThirdPersonController : MonoBehaviour
     //ボールを投げたか
     private bool Throwed = false;
 
+    //ジャンプボタンを押した瞬間から着地するまで他の行動を制限するフラグ
+    [SerializeField] private bool isJumpFlag = false;
 
     [SerializeField]
     private float hp;
@@ -695,6 +697,7 @@ public class ThirdPersonController : MonoBehaviour
                 {
                     //アニメーターのパラメータにジャンプ情報を入れる
                     animator.SetBool(animIDJump, true);
+                    isJumpFlag = true;
                 }
             }
 
@@ -725,6 +728,7 @@ public class ThirdPersonController : MonoBehaviour
 
             //再び押せるようにする
             input.jump = false;
+            isJumpFlag = false;
         }
 
         // 重力を足す
@@ -741,7 +745,7 @@ public class ThirdPersonController : MonoBehaviour
     private void Throw()
     {
         //投げるキーが押されたら
-        if (input.throwing && !Throwing && !Passing && !Fainting && isBallHaving && Grounded)
+        if (input.throwing && !Throwing && !Passing && !Fainting && isBallHaving && !Catching && Grounded && !isJumpFlag)
         {
             if (hasAnimator)
             {
@@ -827,7 +831,7 @@ public class ThirdPersonController : MonoBehaviour
             if (Grounded)
             {
                 //避けるキーが押されたら
-                if (input.dodge)
+                if (input.dodge && !Throwing && !Passing && !isBallHaving && !Fainting && !Catching && Grounded && !isJumpFlag)
                 {
                     if (hasAnimator)
                     {
@@ -885,7 +889,7 @@ public class ThirdPersonController : MonoBehaviour
         if (Grounded)
         {
             //キャッチキーが押されたら
-            if (input.catching && !isBallHaving)
+            if (input.catching && !isBallHaving && !Dodging)
             {
                 if (hasAnimator)
                 {
@@ -1007,7 +1011,7 @@ public class ThirdPersonController : MonoBehaviour
     private void Faint()
     {
         //地面と接地している
-        if (Grounded)
+        if (Grounded && !isJumpFlag && isBallHaving)
         {
             //投げるキーが押されたら
             if (input.faint && !Throwing && !Passing && !Fainting)

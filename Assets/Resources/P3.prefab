@@ -5302,6 +5302,7 @@ GameObject:
   - component: {fileID: 2381908663993983886}
   - component: {fileID: 3812632860394042131}
   - component: {fileID: 3922651500244033170}
+  - component: {fileID: 2263388456599081864}
   - component: {fileID: 6642116653351105882}
   - component: {fileID: 2991206452430109575}
   m_Layer: 10
@@ -5612,10 +5613,10 @@ MonoBehaviour:
   DodgeSpeed: 5.3
   RotationSmoothTime: 0.12
   SpeedChangeRate: 10
-  audioSource: {fileID: 0}
+  audioSource: {fileID: 2263388456599081864}
   LandingAudioClip: {fileID: 8300000, guid: 9e187cc0dcc092747a7698f9a477e67c, type: 3}
-  CatchAudioClip: {fileID: 0}
-  ThrowAudioClip: {fileID: 0}
+  CatchAudioClip: {fileID: 8300000, guid: 6a4aaf83692ec414498a7a639b85a4d0, type: 3}
+  ThrowAudioClip: {fileID: 8300000, guid: 0dbad8e829b2d674595eedcd1250f84d, type: 3}
   FootstepAudioClips:
   - {fileID: 0}
   FootstepAudioVolume: 0.007
@@ -5627,15 +5628,15 @@ MonoBehaviour:
   FallTimeout: 0.15
   ThrowTimeout: 1.3
   DodgeTimeout: 0.8
-  CatchTimeout: 0.6
+  CatchTimeout: 0.665
   PassTimeout: 0.5
-  FaintTimeout: 0.5
+  FaintTimeout: 1.3
   Grounded: 1
   GroundedOffset: -0.14
   GroundedRadius: 0.28
   GroundLayers:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 2049
   HasBall: 0
   BallHitOffset: -0.05
   BallCheckRadius: 0.5
@@ -5657,6 +5658,7 @@ MonoBehaviour:
   BottomClamp: -30
   CameraAngleOverride: 0
   LockCameraPosition: 0
+  isJumpFlag: 0
   hp: 100
   m_isOperation: 0
   canvas: {fileID: 3360031735402271652}
@@ -5665,6 +5667,102 @@ MonoBehaviour:
   virtualCamera: {fileID: 6366840789559583703}
   rectTransform: {fileID: 132978043065511211}
   playerCounter: {fileID: 0}
+--- !u!82 &2263388456599081864
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5883142382201660067}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 34a662ca788ad754684c31be5f75d489, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!114 &6642116653351105882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9306,7 +9404,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9160034989391244991}
   m_LocalRotation: {x: 0.22622624, y: -0, z: -0, w: 0.9740748}
-  m_LocalPosition: {x: 0, y: 3.3123124, z: -2.872459}
+  m_LocalPosition: {x: 0, y: 3.5523121, z: -2.872459}
   m_LocalScale: {x: 0.90909094, y: 0.90909094, z: 0.90909094}
   m_Children: []
   m_Father: {fileID: 6552401553072633881}
@@ -9414,7 +9512,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 944698274683928815, guid: 606a8a2c70fb17348a357f2e8f065623, type: 3}
       propertyPath: ShoulderOffset.y
-      value: 0.7
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 944698275310432464, guid: 606a8a2c70fb17348a357f2e8f065623, type: 3}
       propertyPath: m_Name
@@ -9454,7 +9552,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 944698275310432559, guid: 606a8a2c70fb17348a357f2e8f065623, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.3123124
+      value: 3.5523121
       objectReference: {fileID: 0}
     - target: {fileID: 944698275310432559, guid: 606a8a2c70fb17348a357f2e8f065623, type: 3}
       propertyPath: m_LocalPosition.z

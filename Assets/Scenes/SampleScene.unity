@@ -26371,6 +26371,7 @@ GameObject:
   - component: {fileID: 1985954968}
   - component: {fileID: 1985954967}
   - component: {fileID: 1985954966}
+  - component: {fileID: 1985954969}
   m_Layer: 0
   m_Name: PlayerManager
   m_TagString: Untagged
@@ -26432,7 +26433,7 @@ MonoBehaviour:
         m_Action: Join
         m_Flags: 0
     m_Reference: {fileID: 0}
-  m_PlayerPrefab: {fileID: 5733766154654010451, guid: b5337d8ddc4ec244fad2c9702a69a6cd, type: 3}
+  m_PlayerPrefab: {fileID: 0}
   m_SplitScreen: 1
   m_MaintainAspectRatioInSplitScreen: 0
   m_FixedNumberOfSplitScreens: 2
@@ -26456,6 +26457,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1985954969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1985954965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf2111d6789765c429b9e78ab38abe98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerInputManager: {fileID: 1985954967}
+  pc: {fileID: 1985954966}
+  players:
+  - {fileID: 8582656522511463009, guid: de3ea1d180899bd41854e4bc3f908213, type: 3}
+  - {fileID: 4621604154880869702, guid: 3a057f66d7b295a4e875b02079dc2179, type: 3}
+  - {fileID: 5883142382201660067, guid: 3eb388419e9602342966eb21244639af, type: 3}
+  - {fileID: 982815403512956538, guid: 9ad2ac8a98ec70d4690d2099f30af5d7, type: 3}
 --- !u!1 &1996076527 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 5591eb1e0860ab344a0e6dc3937b1c1c, type: 3}
