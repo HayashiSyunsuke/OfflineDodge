@@ -3313,7 +3313,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 121911
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -10073,7 +10073,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 944698274683928812, guid: 606a8a2c70fb17348a357f2e8f065623, type: 3}
       propertyPath: m_Layer
-      value: 10
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 944698274683928815, guid: 606a8a2c70fb17348a357f2e8f065623, type: 3}
       propertyPath: ShoulderOffset.x
@@ -10089,7 +10089,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 944698275310432464, guid: 606a8a2c70fb17348a357f2e8f065623, type: 3}
       propertyPath: m_Layer
-      value: 10
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 944698275310432558, guid: 606a8a2c70fb17348a357f2e8f065623, type: 3}
       propertyPath: m_Follow
@@ -10098,7 +10098,7 @@ PrefabInstance:
     - target: {fileID: 944698275310432558, guid: 606a8a2c70fb17348a357f2e8f065623, type: 3}
       propertyPath: m_LookAt
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 5773016441766421863}
     - target: {fileID: 944698275310432559, guid: 606a8a2c70fb17348a357f2e8f065623, type: 3}
       propertyPath: m_RootOrder
       value: 4

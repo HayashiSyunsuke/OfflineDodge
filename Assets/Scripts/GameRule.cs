@@ -55,7 +55,6 @@ public class GameRule : MonoBehaviour
     private CountSystem m_countSystem;
 
 
-
     // Start is called before the first frame update
     void Start()
     {
@@ -67,6 +66,7 @@ public class GameRule : MonoBehaviour
         m_stanbyScene.SetActive(true);
         m_stanbyCamera.SetActive(true);
         m_ball.UseGravity = false;
+        
     }
 
     void FixedUpdate()
@@ -83,7 +83,7 @@ public class GameRule : MonoBehaviour
     void Update()
     {
         //プレイヤーが２人より少なければ return する
-        if (m_playerCounter.PlayerNum < 2)
+        if (m_playerCounter.PlayerNum < 4)
             return;
 
         if (m_sceneTimer >= 0.0f)
@@ -148,23 +148,23 @@ public class GameRule : MonoBehaviour
 
 
         //レッドチームの総HPがゼロになったらフラグを立てる
-        if ((int)red <= 0)
-        {
-            m_blueTeamWin = true;
+        //if ((int)red <= 0)
+        //{
+        //    m_blueTeamWin = true;
 
-            m_redTeamDown = true;
+        //    m_redTeamDown = true;
 
-            RoundUpdate();
-        }
-        //ブルーチームの総HPがゼロになったらフラグを立てる
-        else if ((int)blue <= 0)
-        {
-            m_redTeamWin = true;
+        //    RoundUpdate();
+        //}
+        ////ブルーチームの総HPがゼロになったらフラグを立てる
+        //else if ((int)blue <= 0)
+        //{
+        //    m_redTeamWin = true;
 
-            m_blueTeamDown = true;
+        //    m_blueTeamDown = true;
 
-            RoundUpdate();
-        }
+        //    RoundUpdate();
+        //}
 
     }
 
@@ -231,7 +231,7 @@ public class GameRule : MonoBehaviour
     public void ResetPosition()
     {
 
-        bool[] check = { false, false };
+        bool[] check = { false, false, false, false };
 
         //チーム別で位置を初期化する
         foreach (GameObject player in m_listPlayerData)
@@ -240,15 +240,18 @@ public class GameRule : MonoBehaviour
 
             foreach (GameObject spawnPoint in m_listSpawnPoints)
             {
-                if (player.layer == m_listSpawnPoints[num].gameObject.layer && !check[num])
+                if (player.layer == spawnPoint.gameObject.layer && !check[num])
                 {
-                    player.transform.position = m_listSpawnPoints[num].transform.position;  //位置の初期化
-                    player.transform.rotation = m_listSpawnPoints[num].transform.rotation;  //回転の初期化
+                    player.transform.position = spawnPoint.transform.position;  //位置の初期化
+                    player.transform.rotation = spawnPoint.transform.rotation;  //回転の初期化
+                    //player.GetComponent<ThirdPersonController>().CinemachineTargetYaw;
                     check[num] = true;
 
                     break;
                 }
                 num++;
+
+                
             }
         }
 

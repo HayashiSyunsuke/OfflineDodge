@@ -276,26 +276,26 @@ public class ThirdPersonController : MonoBehaviour
 
             this.gameObject.name = "FemaleDummy" + playerCounter.PlayerNum;
             GameObject.FindWithTag("PlayerCanvas").SetActive(false);
-            
+
             if (playerCounter.PlayerNum == 1)
             {
                 this.gameObject.layer = 13;
                 virtualCamera.gameObject.layer = 13;
 
-                camera.cullingMask = ~(1 << 14);
+                camera.cullingMask &= ~(1 << 14 << 17 << 18);
 
                 rectTransform.localPosition = new Vector2(-480f, 0f);
 
                 playerNumber = 1;
 
-                
+
             }
             else if (playerCounter.PlayerNum == 2)
             {
                 this.gameObject.layer = 14;
                 virtualCamera.gameObject.layer = 14;
 
-                camera.cullingMask = ~(1 << 13);
+                camera.cullingMask &= ~(1 << 13 << 17 << 18);
 
                 rectTransform.localPosition = new Vector2(480f, 0f);
 
@@ -312,7 +312,57 @@ public class ThirdPersonController : MonoBehaviour
 
                 playerNumber = 2;
 
-                
+
+            }
+
+            else if (playerCounter.PlayerNum == 3)
+            {
+                this.gameObject.layer = 17;
+                virtualCamera.gameObject.layer = 17;
+
+                camera.cullingMask &= ~(1 << 13 << 14 << 18);
+
+                rectTransform.localPosition = new Vector2(480f, 0f);
+
+                GameObject p1 = GameObject.Find("FemaleDummy1");
+                GameObject p2 = GameObject.Find("FemaleDummy2");
+
+                //p1.GetComponent<ThirdPersonController>().SetEnemy = p2;
+                //p2.GetComponent<ThirdPersonController>().SetEnemy = p1;
+
+                /*-----Debug-----*/
+                //p1.GetComponent<ThirdPersonController>().SetAlly = p2;
+                //p2.GetComponent<ThirdPersonController>().SetAlly = p1;
+                /*---------------*/
+
+                playerNumber = 3;
+
+
+            }
+
+            else if (playerCounter.PlayerNum == 4)
+            {
+                this.gameObject.layer = 18;
+                virtualCamera.gameObject.layer = 18;
+
+                camera.cullingMask &= ~(1 << 13 << 14 << 17);
+
+                rectTransform.localPosition = new Vector2(480f, 0f);
+
+                GameObject p1 = GameObject.Find("FemaleDummy1");
+                GameObject p2 = GameObject.Find("FemaleDummy2");
+
+                //p1.GetComponent<ThirdPersonController>().SetEnemy = p2;
+                //p2.GetComponent<ThirdPersonController>().SetEnemy = p1;
+
+                /*-----Debug-----*/
+                //p1.GetComponent<ThirdPersonController>().SetAlly = p2;
+                //p2.GetComponent<ThirdPersonController>().SetAlly = p1;
+                /*---------------*/
+
+                playerNumber = 4;
+
+
             }
         }
 
@@ -341,9 +391,9 @@ public class ThirdPersonController : MonoBehaviour
 
         //各コンポーネントを取得
         hasAnimator = TryGetComponent(out animator);
-        
+
         input = GetComponent<InputAsist>();
-      
+
 #if ENABLE_INPUT_SYSTEM
         playerInput = GetComponent<PlayerInput>();
 #else
@@ -839,11 +889,11 @@ public class ThirdPersonController : MonoBehaviour
                 {
                     ball.GetComponent<Ball>().TargetStraight(CurrentTarget.transform.position);
                 }
-                
+
                 isBallHaving = false;
                 Throwed = true;
             }
-            if(throwTimeoutDelta <= 0.9f)
+            if (throwTimeoutDelta <= 0.9f)
             {
                 ball.GetComponent<Ball>().CollisionValidation(); //当たり判定を元に戻す
             }
@@ -1580,4 +1630,11 @@ public class ThirdPersonController : MonoBehaviour
         get { return m_isOperation; }
         set { m_isOperation = value; }
     }
+
+    public float CinemachineTargetYaw
+    {
+        get { return cinemachineTargetYaw; }
+        set { cinemachineTargetYaw = value; }
+    }
+
 }
