@@ -39,7 +39,8 @@ public class BarGauge : MonoBehaviour
 
         //scoreBar.fillAmount = NormalizeEncode(posy);
         scoreBar.fillAmount = Mathf.SmoothStep(scoreBar.fillAmount, NormalizeEncode(posy), Time.deltaTime * 15);
-        barGauge.transform.position = new Vector3(barGauge.transform.position.x, NormalizeDecode(scoreBar.fillAmount), barGauge.transform.position.z);
+        //barGauge.transform.position = new Vector3(barGauge.transform.position.x, NormalizeDecode(scoreBar.fillAmount), barGauge.transform.position.z);
+        barGauge.GetComponent<RectTransform>().position = new Vector3(barGauge.transform.position.x, NormalizeDecode(scoreBar.fillAmount), barGauge.transform.position.z);
     }
 
 
@@ -53,6 +54,14 @@ public class BarGauge : MonoBehaviour
     float NormalizeDecode(float parcent)
     {
         return parcent * (max - min) + min;
+    }
+
+    float NormalizeDecodeBaronly(float parcent)
+    {
+        float nMax = max - 440.0f;
+        float nMin = min - 440.0f;
+
+        return parcent * (nMax - nMin) + nMin;
     }
 
 

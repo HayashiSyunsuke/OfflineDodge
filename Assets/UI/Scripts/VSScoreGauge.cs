@@ -36,6 +36,11 @@ public class VSScoreGauge : MonoBehaviour
     {
         if (hitFlag == true)
         {
+            //当たったチームによって処理を変える
+            //if('フラグ' == Red){}
+            //if('フラグ' == Blue){}
+
+            //仮で赤が上がるようにしている
             redBar.GetComponent<BarGauge>().Posy += scorePoint;
             blueBar.GetComponent<BarGauge>().Posy += scorePoint;
 
