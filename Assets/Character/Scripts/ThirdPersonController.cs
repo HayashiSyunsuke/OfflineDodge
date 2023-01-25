@@ -58,6 +58,8 @@ public class ThirdPersonController : MonoBehaviour
     [Tooltip("Time required to pass before begin able to pass again")] public float PassTimeout = 0.5f;
     //再びフェイント動作ができるようになるまでのクールタイム
     [Tooltip("Time required to pass before begin able to faint again")] public float FaintTimeout = 0.5f;
+    //起き上がるまでの動作のクールタイム
+    [Tooltip("Time required to wake up before begin able to wake up")] public float ResuscitableTimeout = 0.5f;
 
     /*-----プレイヤーと地面-----*/
     [Header("Player Grounded")]
@@ -101,6 +103,7 @@ public class ThirdPersonController : MonoBehaviour
     [Tooltip("If the character is fianting or not")] public bool Fainting = false;
     // キャラクターが死んでるか
     [Tooltip("If the character is Dieing or not")] public bool Dieing = false;
+
     /*-----プレイヤーの回避動作-----*/
     [Header("Player Dodging")]
     //キャラクターが避けているか
@@ -111,6 +114,24 @@ public class ThirdPersonController : MonoBehaviour
     //キャラクターがキャッチしているか
     [Tooltip("If the character is catching or not")] public bool Catching = false;
     Vector3 ballCheckSpherePosition;
+
+    /*-----キャラクターの志望動作-----*/
+    // キャラクターが死んでるか
+    [Tooltip("If the character is Dieing or not")] public bool Dying = false;
+
+    /*-----キャラクターの蘇生-----*/
+    //キャラクターの蘇生範囲
+    [Tooltip("Character resuscitation range")] private float ResuscitationRange = 1.0f;
+    //蘇生可能フラグ
+    public bool resuscitable = false;
+    //蘇生している
+    public bool Reanimated = false;
+    //動けないようにする
+    public bool freeze = false;
+    //エフェクト
+    [SerializeField]
+    private ParticleSystem m_soseiParticle;
+    ParticleSystem newEffect;
 
     /*-----ターゲット-----*/
     [Header("Current targets")] public GameObject CurrentTarget;
@@ -127,9 +148,16 @@ public class ThirdPersonController : MonoBehaviour
     [Tooltip("Useful for fine tuning camera position when locked")] public float CameraAngleOverride = 0.0f;
     //全軸のカメラ位置を固定
     [Tooltip("For locking the camera posotion on all axis")] public bool LockCameraPosition = false;
+    //カメラの振り向き終了フラグ
+    private bool isFinishRotation = false;
 
     /*-----敵-----*/
-    [Tooltip("EnemyObject")] private GameObject enemyGameObject;
+    [Tooltip("EnemyObject")] private GameObject[] enemyGameObject;
+    int enemyNumber = 0;
+
+    /*-----味方1-----*/
+    [Tooltip("AllyObject")] public GameObject allyGameObject;
+    private ThirdPersonController allyTPC;
 
     //シネマシーン
     private float cinemachineTargetYaw;
@@ -151,6 +179,7 @@ public class ThirdPersonController : MonoBehaviour
     private float catchTimeoutDelta;
     private float passTimeoutDelta;
     private float faintTimeoutDelta;
+    private float resuscitableTimeoutDelta;
 
     //アニメーションID
     private int animIDSpeed;
@@ -167,6 +196,7 @@ public class ThirdPersonController : MonoBehaviour
     private int animIDTarget;
     private int animIDFront;
     private int animIDSide;
+    private int animIDResuscitation;
 
     //ボールを投げたか
     private bool Throwed = false;
@@ -200,12 +230,21 @@ public class ThirdPersonController : MonoBehaviour
     private CharacterController controller;
     private InputAsist input;
     private GameObject mainCamera;
-    private TrailRenderer tr;
+    //private TrailRenderer tr;
 
     private const float threshold = 0.01f;
 
     //現在のアニメーション
     private bool hasAnimator;
+
+    /*--------------------------DUBUG-------------------------*/
+    //上下の打ち分けデバッグ変数(0:頭 1:体 2:足)
+    public int targetNumber = 0;
+    //打ち分け用のキーを長押しさせないフラグ
+    private bool isHold = false;
+
+
+
 
     private bool IsCurrentDeviceMouse
     {
@@ -263,8 +302,13 @@ public class ThirdPersonController : MonoBehaviour
                 GameObject p1 = GameObject.Find("FemaleDummy1");
                 GameObject p2 = GameObject.Find("FemaleDummy2");
 
-                p1.GetComponent<ThirdPersonController>().SetEnemy = p2;
-                p2.GetComponent<ThirdPersonController>().SetEnemy = p1;
+                //p1.GetComponent<ThirdPersonController>().SetEnemy = p2;
+                //p2.GetComponent<ThirdPersonController>().SetEnemy = p1;
+
+                /*-----Debug-----*/
+                p1.GetComponent<ThirdPersonController>().SetAlly = p2;
+                p2.GetComponent<ThirdPersonController>().SetAlly = p1;
+                /*---------------*/
 
                 playerNumber = 2;
 
@@ -299,7 +343,7 @@ public class ThirdPersonController : MonoBehaviour
         hasAnimator = TryGetComponent(out animator);
         
         input = GetComponent<InputAsist>();
-        tr = GetComponent<TrailRenderer>();
+      
 #if ENABLE_INPUT_SYSTEM
         playerInput = GetComponent<PlayerInput>();
 #else
@@ -316,6 +360,7 @@ public class ThirdPersonController : MonoBehaviour
         catchTimeoutDelta = CatchTimeout;
         passTimeoutDelta = PassTimeout;
         faintTimeoutDelta = FaintTimeout;
+        resuscitableTimeoutDelta = ResuscitableTimeout;
     }
 
     private void Update()
@@ -340,10 +385,16 @@ public class ThirdPersonController : MonoBehaviour
             Faint();
             Dodge();
             Catch();
-            //Die();
-            ChangeTargets();
-            ReturnBall();
+            Die();
+            //ChangeMode();
+            //ChangeTarget();
+            TargetArea();
 
+            Revival();
+            Resuscitation();
+
+            //DEBUG↓↓↓
+            ReturnBall();
             ResetPosition();
         }
     }
@@ -366,10 +417,11 @@ public class ThirdPersonController : MonoBehaviour
         animIDCatch = Animator.StringToHash("Catch");
         animIDPass = Animator.StringToHash("Pass");
         animIDFaint = Animator.StringToHash("Faint");
-        animIDDie = Animator.StringToHash("die");
+        animIDDie = Animator.StringToHash("Die");
         animIDTarget = Animator.StringToHash("Target");
         animIDFront = Animator.StringToHash("Front");
         animIDSide = Animator.StringToHash("Side");
+        animIDResuscitation = Animator.StringToHash("Resuscitation");
     }
 
     /// <summary>
@@ -460,16 +512,19 @@ public class ThirdPersonController : MonoBehaviour
 
         if (cinemachineTargetPitch < 0)
         {
-            cinemachineTargetPitch += 1f;
+            cinemachineTargetPitch += 2f;
+            isFinishRotation = false;
         }
         else if (cinemachineTargetPitch > 0)
         {
-            cinemachineTargetPitch -= 1f;
+            cinemachineTargetPitch -= 2f;
+            isFinishRotation = false;
         }
 
-        if (cinemachineTargetPitch <= 1f && cinemachineTargetPitch >= -1f)
+        if (cinemachineTargetPitch <= 2f && cinemachineTargetPitch >= -2f)
         {
             cinemachineTargetPitch = 0f;
+            isFinishRotation = true;
         }
 
         CinemachineCameraTarget.transform.rotation = Quaternion.Euler(new Vector3(cinemachineTargetPitch, rotation, 0.0f));
@@ -491,7 +546,7 @@ public class ThirdPersonController : MonoBehaviour
         if (CurrentTarget != null) return;
 
         //回避中は動けない
-        if (Dodging || Throwing || Catching || Fainting) return;
+        if (freeze) return;
 
         // 移動速度を設定
         float targetSpeed = SprintSpeed;
@@ -586,7 +641,7 @@ public class ThirdPersonController : MonoBehaviour
         if (CurrentTarget == null) return;
 
         //回避中は動けない
-        if (Dodging || Throwing || Catching || Fainting) return;
+        if (freeze) return;
 
         // 移動速度を設定
         float targetSpeed = TargetingMoveSpeed;
@@ -688,7 +743,7 @@ public class ThirdPersonController : MonoBehaviour
             }
 
             // ジャンプする場合
-            if (input.jump && jumpTimeoutDelta <= 0.0f && !Throwing && !Fainting && !Dodging && !Catching && !CurrentTarget)
+            if (input.jump && jumpTimeoutDelta <= 0.0f && !freeze && !CurrentTarget)
             {
                 //  H * -2 * G = 望みの高さに到達するために必要な速度
                 verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
@@ -745,11 +800,16 @@ public class ThirdPersonController : MonoBehaviour
     private void Throw()
     {
         //投げるキーが押されたら
-        if (input.throwing && !Throwing && !Passing && !Fainting && isBallHaving && !Catching && Grounded && !isJumpFlag)
+        if (input.ThrowingAndCatching && isBallHaving && Grounded && !isJumpFlag && !freeze && isFinishRotation)
         {
             if (hasAnimator)
             {
+                //投げる
                 Throwing = true;
+
+                //動けなくする
+                freeze = true;
+
                 //アニメーターのパラメータに投げる情報を入れる
                 animator.SetBool(animIDThrow, Throwing);
 
@@ -798,11 +858,17 @@ public class ThirdPersonController : MonoBehaviour
             {
                 if (hasAnimator)
                 {
+                    //投げ終了
                     Throwing = false;
+
+                    //動けるようにする
+                    freeze = false;
+
                     //アニメーターのパラメータに投げる情報を入れる
                     animator.SetBool(animIDThrow, Throwing);
 
-                    
+                    //再び押せるようにする
+                    input.ThrowingAndCatching = false;
                 }
             }
         }
@@ -812,10 +878,6 @@ public class ThirdPersonController : MonoBehaviour
             throwTimeoutDelta = ThrowTimeout;
             Throwed = false;
         }
-
-
-        //再び押せるようにする
-        input.throwing = false;
     }
 
     /// <summary>
@@ -831,11 +893,16 @@ public class ThirdPersonController : MonoBehaviour
             if (Grounded)
             {
                 //避けるキーが押されたら
-                if (input.dodge && !Throwing && !Passing && !isBallHaving && !Fainting && !Catching && Grounded && !isJumpFlag)
+                if (input.dodge && !isBallHaving && Grounded && !isJumpFlag && !freeze)
                 {
                     if (hasAnimator)
                     {
+                        //回避する
                         Dodging = true;
+
+                        //動けなくする
+                        freeze = true;
+
                         coolTime.CoolTimeFlag = Dodging;
                         //アニメータのパラメータに情報を入れる
                         animator.SetBool(animIDDodge, Dodging);
@@ -862,7 +929,12 @@ public class ThirdPersonController : MonoBehaviour
             {
                 if (hasAnimator)
                 {
+                    //回避終了
                     Dodging = false;
+
+                    //動けるようにする
+                    freeze = false;
+
                     //アニメータのパラメータに投げる情報を入れる
                     animator.SetBool(animIDDodge, Dodging);
                 }
@@ -886,14 +958,19 @@ public class ThirdPersonController : MonoBehaviour
 
         ballCheckSpherePosition.y = 1.5f;
 
-        if (Grounded)
+        if (Grounded && !isJumpFlag)
         {
             //キャッチキーが押されたら
-            if (input.catching && !isBallHaving && !Dodging)
+            if (input.ThrowingAndCatching && !isBallHaving && !freeze)
             {
                 if (hasAnimator)
                 {
+                    //キャッチする
                     Catching = true;
+
+                    //動けなくする
+                    freeze = true;
+
                     //アニメーターのパラメータに情報を入れる
                     animator.SetBool(animIDCatch, Catching);
                 }
@@ -927,7 +1004,12 @@ public class ThirdPersonController : MonoBehaviour
                 {
                     if (hasAnimator)
                     {
+                        //キャッチ終了
                         Catching = false;
+
+                        //動けるようにする
+                        freeze = false;
+
                         //アニメーターのパラメータにキャッチの情報を入れる
                         animator.SetBool(animIDCatch, Catching);
                     }
@@ -1011,14 +1093,19 @@ public class ThirdPersonController : MonoBehaviour
     private void Faint()
     {
         //地面と接地している
-        if (Grounded && !isJumpFlag && isBallHaving)
+        if (Grounded)
         {
             //投げるキーが押されたら
-            if (input.faint && !Throwing && !Passing && !Fainting)
+            if (input.faint && !isJumpFlag && isBallHaving && !freeze)
             {
                 if (hasAnimator)
                 {
+                    //フェイントする
                     Fainting = true;
+
+                    //動けなくする
+                    freeze = true;
+
                     //アニメーターのパラメータに投げる情報を入れる
                     animator.SetBool(animIDFaint, Fainting);
                 }
@@ -1037,7 +1124,12 @@ public class ThirdPersonController : MonoBehaviour
                 {
                     if (hasAnimator)
                     {
+                        //フェイント終了
                         Fainting = false;
+
+                        //動けるようにする
+                        freeze = false;
+
                         //アニメーターのパラメータに投げる情報を入れる
                         animator.SetBool(animIDFaint, Fainting);
                     }
@@ -1054,29 +1146,207 @@ public class ThirdPersonController : MonoBehaviour
         input.faint = false;
     }
 
-    // 死ぬ
+    private void TargetArea()
+    {
+        //ターゲットしていなかったらリターン
+        if (CurrentTarget == null) return;
+
+        //入力されていなかったらisHoldをfalse
+        if (!input.lower && !input.upper) isHold = false;
+        if (isHold) return;
+
+        switch (targetNumber)
+        {
+            case 0:  //頭
+
+                //投げの処理↓
+
+                //体を狙う
+                if (input.lower)
+                {
+                    targetNumber = 1;
+                    isHold = true;
+                    //input.lower = false;
+                }
+                break;
+            case 1:  //体
+
+                //投げの処理↓
+
+                //頭を狙う
+                if (input.upper)
+                {
+                    targetNumber = 0;
+                    isHold = true;
+                    //input.upper = false;
+                }
+
+                //足を狙う
+                if (input.lower)
+                {
+                    targetNumber = 2;
+                    isHold = true;
+                    //input.lower = false;
+                }
+                break;
+            case 2:  //足
+
+                //投げの処理
+
+                //体を狙う
+                if (input.upper)
+                {
+                    targetNumber = 1;
+                    isHold = true;
+                    //input.upper = false;
+                }
+                break;
+        }
+    }
+
+
+    /// <summary>
+    /// 死ぬ(HPが0以下になったら死亡)
+    /// </summary>
     public void Die()
     {
+        //Hpが残っていたらリターン
+        if (hp > 0) return;
+
         if (hasAnimator)
         {
-            Dieing = true;
-            //アニメーターのパラメータに投げる情報を入れる
-            animator.SetBool(animIDDie, Dieing);
-        }
-        else
-        {
-            Dieing = false;
+            //死ぬ
+            Dying = true;
 
+            //動けなくする
+            freeze = true;
+
+            //アニメーターのパラメータに死ぬ情報を入れる
+            animator.SetBool(animIDDie, Dying);
         }
     }
 
     /// <summary>
-    /// ターゲット変更
+    /// 復活(自動的にHPが回復する&HPがMAXになったら復活)
     /// </summary>
-    ///     
-    private void ChangeTargets()
+    public void Revival()
     {
-        if (input.untarget && Grounded && !Throwing && !Dodging && !Fainting && !Catching)
+        //死んでいなかったらリターン
+        if (!Dying) return;
+
+        //HPが全回復したら復活
+        if (hp >= 100)
+        {
+            if (hasAnimator)
+            {
+                //復活
+                Dying = false;
+
+                //動けるようにする
+                freeze = false;
+
+                //アニメーターのパラメータに生き返る情報を入れる
+                animator.SetBool(animIDDie, Dying);
+            }
+            return;
+        }
+
+        //体力を徐々に回復する
+        hp += 0.1f;
+    }
+
+    /// <summary>
+    /// 蘇生(死んでいる味方の近くで蘇生ボタンを押す。味方のHPを早く回復する。)
+    /// </summary>
+    public void Resuscitation()
+    {
+        //蘇生ボタンを押したら
+        if (input.resuscitation && !isJumpFlag && !isBallHaving && allyGameObject.GetComponent<ThirdPersonController>().DIE)
+        {
+            //trueなら
+            if (resuscitable = CheckResuscitable())
+            {
+                //蘇生する
+                Reanimated = true;
+
+                //動けないようにする
+                freeze = true;
+
+                if (newEffect == null)
+                {
+                    //パーティクル
+                    newEffect = Instantiate(m_soseiParticle);
+                    newEffect.transform.position = transform.position;
+                    newEffect.Play();
+                }
+
+                //アニメーターのパラメータに蘇生情報を入れる
+                animator.SetBool(animIDResuscitation, Reanimated);
+
+                //HPを高速回復する
+                allyGameObject.GetComponent<ThirdPersonController>().HP += 0.5f;
+            }
+        }
+        else
+        {
+            //蘇生が終わった後だけ入る
+            if (Reanimated)
+            {
+                //アニメーターのパラメータに蘇生情報を入れる
+                animator.SetBool(animIDResuscitation, false);
+
+                if (newEffect != null)
+                {
+                    Destroy(newEffect.gameObject);
+                    newEffect.Stop();
+                }
+
+                //時間が残っていたら減らす
+                if (resuscitableTimeoutDelta >= 0.0f)
+                {
+                    resuscitableTimeoutDelta -= Time.deltaTime;
+                }
+                else
+                {
+                    if (hasAnimator)
+                    {
+                        //蘇生を終了する
+                        Reanimated = false;
+
+                        //動けるようにする
+                        freeze = false;
+
+                        //投げるデルタタイムをリセット
+                        resuscitableTimeoutDelta = ResuscitableTimeout;
+                    }
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// 蘇生できるかのチェック1
+    /// </summary>
+    /// <returns>蘇生可能:true  蘇生不可:false</returns>
+    bool CheckResuscitable()
+    {
+        // 中心間の距離の平方を計算
+        Vector3 d = transform.position - allyGameObject.transform.position;
+
+        float dist2 = Vector3.Dot(d, d);
+
+        // 平方した距離が平方した半径の合計よりも小さい場合には衝突している
+        float radiusSum = ResuscitationRange + ResuscitationRange;
+
+        return dist2 <= radiusSum * radiusSum;
+    }
+
+    /// <summary>
+    /// モード切り替え
+    /// </summary>    
+    private void ChangeMode()
+    {
+        if (input.untarget && Grounded && !freeze)
         {
             if (CurrentTarget != null)
             {
@@ -1086,11 +1356,32 @@ public class ThirdPersonController : MonoBehaviour
             else
             {
                 //敵を追加
-                CurrentTarget = enemyGameObject;
+                CurrentTarget = enemyGameObject[enemyNumber];
             }
         }
         input.untarget = false;
     }
+
+    /// <summary>
+    /// ターゲット切り替え
+    /// </summary>
+    private void ChangeTarget()
+    {
+        if (CurrentTarget)
+        {
+            if (input.left)
+            {
+                enemyNumber = 0;
+                CurrentTarget = enemyGameObject[enemyNumber];
+            }
+            if (input.right)
+            {
+                enemyNumber = 1;
+                CurrentTarget = enemyGameObject[enemyNumber];
+            }
+        }
+    }
+
 
     /// <summary>
     /// ボールを拾う
@@ -1262,15 +1553,26 @@ public class ThirdPersonController : MonoBehaviour
         get { return Grounded; }
     }
 
-    public GameObject SetEnemy
+    public GameObject[] SetEnemy
     {
         set { enemyGameObject = value; }
     }
+
+    public GameObject SetAlly
+    {
+        set { allyGameObject = value; }
+    }
+
 
     public float HP
     {
         get { return hp; }
         set { hp = value; }
+    }
+
+    public bool DIE
+    {
+        get { return Dying; }
     }
 
     public bool IsOperation

@@ -38,9 +38,9 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Catch",
+                    "name": "ThrowAndCatch",
                     "type": "Button",
-                    "id": "23c8932f-7c93-42c8-8286-0e549145c7b6",
+                    "id": "31f05fad-acc3-415d-90e2-14a8c3afb406",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -65,14 +65,6 @@
                     "name": "ChangeTargetLeft",
                     "type": "Button",
                     "id": "ba981bb3-6e33-45cc-871d-b18f07f6e4f8",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": ""
-                },
-                {
-                    "name": "Throw",
-                    "type": "Button",
-                    "id": "31f05fad-acc3-415d-90e2-14a8c3afb406",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -106,6 +98,30 @@
                     "type": "Value",
                     "id": "5a96b24f-f3cd-4147-91a8-e4fe9d273a2d",
                     "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Resuscitation",
+                    "type": "Button",
+                    "id": "d648e5fc-1a06-48de-a55d-45d0491eb80f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "UpperTarget",
+                    "type": "Button",
+                    "id": "174ad1c0-4af7-49ec-9847-71e6cd4065aa",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "LowerTarget",
+                    "type": "Button",
+                    "id": "0e5d44db-9b13-4808-a7b3-a50d161b1da7",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 }
@@ -245,28 +261,6 @@
                 },
                 {
                     "name": "",
-                    "id": "d9c23c49-38e7-4428-bd29-7c77953e66d1",
-                    "path": "<Keyboard>/enter",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "Throw",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "146fb911-4f11-4064-afaf-9675959276c9",
-                    "path": "<Gamepad>/buttonEast",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Throw",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "a352d507-2f01-4678-accf-567456b13666",
                     "path": "<Keyboard>/leftArrow",
                     "interactions": "",
@@ -333,28 +327,6 @@
                 },
                 {
                     "name": "",
-                    "id": "47d902b6-8b6f-4694-94a8-704b270008b3",
-                    "path": "<Keyboard>/leftCtrl",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "Catch",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "366ba889-36d8-4e7e-84d6-ea13c19fbf0f",
-                    "path": "<Gamepad>/leftShoulder",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Catch",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "64151f2a-4a67-452c-afa2-ffef3ef0898b",
                     "path": "<Keyboard>/1",
                     "interactions": "",
@@ -416,6 +388,61 @@
                     "processors": "",
                     "groups": "KeyboardMouse",
                     "action": "ReturnBall",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4612d20b-c6ac-4fff-b979-69bf0b7e7439",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Resuscitation",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a50eea6c-4428-4b5a-ad1a-d521eeac677c",
+                    "path": "<Gamepad>/rightStick/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "UpperTarget",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e121eb3c-589f-4407-9926-d1b60bc3d7ca",
+                    "path": "<Gamepad>/rightStick/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "LowerTarget",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d9c23c49-38e7-4428-bd29-7c77953e66d1",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "ThrowAndCatch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "146fb911-4f11-4064-afaf-9675959276c9",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "ThrowAndCatch",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

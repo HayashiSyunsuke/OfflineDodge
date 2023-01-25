@@ -608,22 +608,6 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 3189884408005146061}
         m_TargetAssemblyTypeName: InputAsist, Assembly-CSharp
-        m_MethodName: OnCatch
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 23c8932f-7c93-42c8-8286-0e549145c7b6
-    m_ActionName: Player/Catch[/Keyboard/leftCtrl,/XInputControllerWindows3/leftShoulder,/XInputControllerWindows/leftShoulder,/XInputControllerWindows1/leftShoulder,/XInputControllerWindows2/leftShoulder]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3189884408005146061}
-        m_TargetAssemblyTypeName: InputAsist, Assembly-CSharp
         m_MethodName: OnDodge
         m_Mode: 0
         m_Arguments:
@@ -637,18 +621,42 @@ MonoBehaviour:
     m_ActionId: 038bc124-4413-4b47-8640-2dd5f21f76a9
     m_ActionName: Player/Dodge[/Keyboard/upArrow,/XInputControllerWindows3/buttonWest,/XInputControllerWindows/buttonWest,/XInputControllerWindows1/buttonWest,/XInputControllerWindows2/buttonWest]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3189884408005146061}
+        m_TargetAssemblyTypeName: InputAsist, Assembly-CSharp
+        m_MethodName: OnRightArrowState
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: a5305090-ae6f-42a1-8e02-cab8aec942b4
     m_ActionName: Player/ChangeTargetRight[/Keyboard/rightArrow,/XInputControllerWindows3/rightStick/right,/XInputControllerWindows/rightStick/right,/XInputControllerWindows1/rightStick/right,/XInputControllerWindows2/rightStick/right]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3189884408005146061}
+        m_TargetAssemblyTypeName: InputAsist, Assembly-CSharp
+        m_MethodName: OnLeftArrowState
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: ba981bb3-6e33-45cc-871d-b18f07f6e4f8
     m_ActionName: Player/ChangeTargetLeft[/Keyboard/leftArrow,/XInputControllerWindows3/rightStick/left,/XInputControllerWindows/rightStick/left,/XInputControllerWindows1/rightStick/left,/XInputControllerWindows2/rightStick/left]
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3189884408005146061}
         m_TargetAssemblyTypeName: InputAsist, Assembly-CSharp
-        m_MethodName: OnThrowing
+        m_MethodName: OnThrowingAndCatching
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -712,6 +720,54 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 5a96b24f-f3cd-4147-91a8-e4fe9d273a2d
     m_ActionName: Player/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d,/XInputControllerWindows3/leftStick,/XInputControllerWindows/leftStick,/XInputControllerWindows1/leftStick,/XInputControllerWindows2/leftStick]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3189884408005146061}
+        m_TargetAssemblyTypeName: InputAsist, Assembly-CSharp
+        m_MethodName: OnResuscitation
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: d648e5fc-1a06-48de-a55d-45d0491eb80f
+    m_ActionName: Player/Resuscitation[/XInputControllerWindows/rightShoulder]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3189884408005146061}
+        m_TargetAssemblyTypeName: InputAsist, Assembly-CSharp
+        m_MethodName: OnUpper
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 174ad1c0-4af7-49ec-9847-71e6cd4065aa
+    m_ActionName: Player/UpperTarget[/XInputControllerWindows/rightStick/up]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3189884408005146061}
+        m_TargetAssemblyTypeName: InputAsist, Assembly-CSharp
+        m_MethodName: OnLower
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 0e5d44db-9b13-4808-a7b3-a50d161b1da7
+    m_ActionName: Player/LowerTarget[/XInputControllerWindows/rightStick/down]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Gamepad
   m_DefaultActionMap: Player
@@ -759,7 +815,7 @@ MonoBehaviour:
   CatchAudioClip: {fileID: 8300000, guid: 6a4aaf83692ec414498a7a639b85a4d0, type: 3}
   ThrowAudioClip: {fileID: 8300000, guid: 0dbad8e829b2d674595eedcd1250f84d, type: 3}
   FootstepAudioClips:
-  - {fileID: 0}
+  - {fileID: 8300000, guid: 34a662ca788ad754684c31be5f75d489, type: 3}
   FootstepAudioVolume: 0.007
   CatchAudioVolume: 0.5
   ThrowAudioVolume: 0.5
@@ -772,6 +828,7 @@ MonoBehaviour:
   CatchTimeout: 0.63
   PassTimeout: 0.5
   FaintTimeout: 1.3
+  ResuscitableTimeout: 0.5
   Grounded: 1
   GroundedOffset: -0.14
   GroundedRadius: 0.28
@@ -793,12 +850,18 @@ MonoBehaviour:
   Dieing: 0
   Dodging: 0
   Catching: 0
+  Dying: 0
+  resuscitable: 0
+  Reanimated: 0
+  freeze: 0
+  m_soseiParticle: {fileID: 7341152293061503418, guid: 348fb4444ee33634496dcb33e04df535, type: 3}
   CurrentTarget: {fileID: 0}
   CinemachineCameraTarget: {fileID: 5868620825927570452}
   TopClamp: 70
   BottomClamp: -30
   CameraAngleOverride: 0
   LockCameraPosition: 0
+  allyGameObject: {fileID: 0}
   isJumpFlag: 0
   hp: 100
   m_isOperation: 0
@@ -808,6 +871,7 @@ MonoBehaviour:
   virtualCamera: {fileID: 4770107620362845166}
   rectTransform: {fileID: 7649809903424262857}
   playerCounter: {fileID: 0}
+  targetNumber: 0
 --- !u!82 &-8892178622847219203
 AudioSource:
   m_ObjectHideFlags: 0
@@ -920,15 +984,17 @@ MonoBehaviour:
   look: {x: 0, y: 0}
   jump: 0
   sprint: 0
-  throwing: 0
+  ThrowingAndCatching: 0
   left: 0
   right: 0
   dodge: 0
-  catching: 0
   pass: 0
   faint: 0
   untarget: 0
   returned: 0
+  resuscitation: 0
+  upper: 0
+  lower: 0
   analogMovement: 0
   cursorLocked: 1
   cursorInputForLook: 1
