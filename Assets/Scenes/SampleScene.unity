@@ -13277,6 +13277,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Drunk Run Forward
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d775e04d1bdbfb243bb4ef7b3f4fcd73, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: d775e04d1bdbfb243bb4ef7b3f4fcd73, type: 3}
       propertyPath: m_Controller
       value: 
@@ -20249,6 +20253,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ball
       objectReference: {fileID: 0}
+    - target: {fileID: 2012476118177677626, guid: 8e4cc81b9bdd4064da2bfb100d562c14, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: -2338215285054080029, guid: 8e4cc81b9bdd4064da2bfb100d562c14, type: 3}
     - {fileID: -2671650496960689163, guid: 8e4cc81b9bdd4064da2bfb100d562c14, type: 3}
@@ -21739,6 +21747,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: WallMarias
       objectReference: {fileID: 0}
+    - target: {fileID: 2651494533082270657, guid: eee8b152f51f09d4f91f3bb7103ac24b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2651494533082270658, guid: eee8b152f51f09d4f91f3bb7103ac24b, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -22902,7 +22914,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &609239676
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30460,6 +30472,10 @@ PrefabInstance:
     - target: {fileID: 2540501597634780166, guid: e5c22815b2bc26f4e93a26d355d6111c, type: 3}
       propertyPath: m_Name
       value: TargetGroup1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2540501597634780166, guid: e5c22815b2bc26f4e93a26d355d6111c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2540501597634780168, guid: e5c22815b2bc26f4e93a26d355d6111c, type: 3}
       propertyPath: m_RootOrder
@@ -51924,6 +51940,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ComPlaneV1
       objectReference: {fileID: 0}
+    - target: {fileID: 5525295603368428666, guid: f6d4109da7a8fb14598e335baed19ec6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f6d4109da7a8fb14598e335baed19ec6, type: 3}
 --- !u!1 &1422172515 stripped
@@ -56874,7 +56894,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1298985347476497152, guid: 7668264cb5c412b4e88523ee2a54cb89, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1298985347476497156, guid: 7668264cb5c412b4e88523ee2a54cb89, type: 3}
       propertyPath: m_Pivot.x
@@ -61955,6 +61975,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 286ee898d944b3e4b8f2b287bbf76323, type: 3}
       propertyPath: m_Layer
       value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 286ee898d944b3e4b8f2b287bbf76323, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 978901947250364931, guid: 286ee898d944b3e4b8f2b287bbf76323, type: 3}
       propertyPath: m_Layer
@@ -73248,6 +73272,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: cc75c07516ad7b74ab90876db16c0f2d, type: 3}
       propertyPath: m_Name
       value: LowPolyTruck
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: cc75c07516ad7b74ab90876db16c0f2d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1151388028547126963, guid: cc75c07516ad7b74ab90876db16c0f2d, type: 3}
       propertyPath: m_LocalPosition.x
