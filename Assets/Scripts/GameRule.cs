@@ -54,6 +54,14 @@ public class GameRule : MonoBehaviour
     [SerializeField]
     private CountSystem m_countSystem;
 
+    //赤チーム
+    List<GameObject> redTeam = new List<GameObject>();
+    //青チーム
+    List<GameObject> blueTeam = new List<GameObject>();
+    //全体
+    List<ThirdPersonController> tpc = new List<ThirdPersonController>();
+    //一回だけ
+    bool flagOnce;
 
     // Start is called before the first frame update
     void Start()
@@ -107,8 +115,14 @@ public class GameRule : MonoBehaviour
         //スタートフラグがTrueの時にラウンドをスタートする
         if (m_startFlag)
             StartRound();
-               
-       //リセットフラグがTrueの時にポジションをリセットする
+
+        if (!flagOnce)
+        {
+            SettingCharacterInfo();
+            flagOnce = true;
+        }
+
+        //リセットフラグがTrueの時にポジションをリセットする
         if (m_resetFlag)
         {
             //ボールに重力を加える
@@ -291,6 +305,39 @@ public class GameRule : MonoBehaviour
 
         
     }
+
+    private void SettingCharacterInfo()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            //奇数チーム
+            if (i % 2 == 1)
+            {
+                blueTeam.Add(m_listPlayerData[i]);
+                m_listPlayerData[i].GetComponent<ThirdPersonController>().CinemachineTargetYaw = 180;
+            }
+            //偶数チーム
+            if (i % 2 == 0)
+            {
+                redTeam.Add(m_listPlayerData[i]);
+            }
+
+            tpc.Add(m_listPlayerData[i].GetComponent<ThirdPersonController>());
+        }
+
+        tpc[0].SetEnemy = blueTeam;
+        tpc[0].SetAlly = redTeam[1];
+
+        tpc[1].SetEnemy = redTeam;
+        tpc[1].SetAlly = blueTeam[1];
+
+        tpc[2].SetEnemy = blueTeam;
+        tpc[2].SetAlly = redTeam[0];
+
+        tpc[3].SetEnemy = redTeam;
+        tpc[3].SetAlly = blueTeam[0];
+    }
+
 
     public void ResetTimer()
     {

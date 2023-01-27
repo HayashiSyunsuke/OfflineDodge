@@ -155,7 +155,7 @@ public class Ball : MonoBehaviour
 
         if (
             (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Enemy")   //タグが"Player"もしくは"Enemy"なら
-            && !tpc.Dieing                                                                  //死亡してなければ 
+            //&& !tpc.Dieing                                                                  //死亡してなければ 
             && m_hitValidity                                                                //ボールがバウンドしてなければ
             && collision.gameObject.layer != m_teamLayer                                    //投げた人と違うチームなら
             )

@@ -149,10 +149,10 @@ public class ThirdPersonController : MonoBehaviour
     //全軸のカメラ位置を固定
     [Tooltip("For locking the camera posotion on all axis")] public bool LockCameraPosition = false;
     //カメラの振り向き終了フラグ
-    private bool isFinishRotation = false;
+    private bool isFinishRotation = true;
 
     /*-----敵-----*/
-    [Tooltip("EnemyObject")] private GameObject[] enemyGameObject;
+    [Tooltip("EnemyObject")] private List<GameObject> enemyGameObject;
     int enemyNumber = 0;
 
     /*-----味方1-----*/
@@ -436,8 +436,8 @@ public class ThirdPersonController : MonoBehaviour
             Dodge();
             Catch();
             Die();
-            //ChangeMode();
-            //ChangeTarget();
+            ChangeMode();
+            ChangeTarget();
             TargetArea();
 
             Revival();
@@ -533,6 +533,8 @@ public class ThirdPersonController : MonoBehaviour
 
     private void CameraRotation()
     {
+        if (CurrentTarget != null) return;
+
         // if there is an input and camera position is not fixed
         if (input.look.sqrMagnitude >= threshold && !LockCameraPosition)
         {
@@ -1265,6 +1267,8 @@ public class ThirdPersonController : MonoBehaviour
 
         if (hasAnimator)
         {
+            CurrentTarget = null;
+
             //死ぬ
             Dying = true;
 
@@ -1273,6 +1277,8 @@ public class ThirdPersonController : MonoBehaviour
 
             //アニメーターのパラメータに死ぬ情報を入れる
             animator.SetBool(animIDDie, Dying);
+
+            CinemachineCameraTarget.transform.localPosition = new Vector3(0.0f,0.2f,0.0f);
         }
     }
 
@@ -1297,6 +1303,8 @@ public class ThirdPersonController : MonoBehaviour
 
                 //アニメーターのパラメータに生き返る情報を入れる
                 animator.SetBool(animIDDie, Dying);
+
+                CinemachineCameraTarget.transform.localPosition = new Vector3(0.0f, 1.0f, 0.0f);
             }
             return;
         }
@@ -1603,7 +1611,7 @@ public class ThirdPersonController : MonoBehaviour
         get { return Grounded; }
     }
 
-    public GameObject[] SetEnemy
+    public List<GameObject> SetEnemy
     {
         set { enemyGameObject = value; }
     }
