@@ -5,11 +5,13 @@ using UnityEngine;
 public class slid : MonoBehaviour
 {
     private Animator anim;
-    int animTimer;
+    float animTimer;
     bool slidFlag = false;
     public flagManager manager;
     bool a = false;
     public bool kickFlag = false;
+    public bool wallCrashFlag = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,22 +33,16 @@ public class slid : MonoBehaviour
         if (anim.GetBool("slid") == true)
         {
             a = true;
-            animTimer++;
+            animTimer += Time.deltaTime;
         }
-
-        //if (animTimer >= 71)
-        //{
-        //    anim.SetBool("slid", false);
-        //    animTimer = 0;
-        //    slidFlag = false;
-        //}
         if (!a)
         {
             return;
         }
-        if (Time.deltaTime >= 71)
+        if (animTimer >= 5.0f)
         {
             kickFlag = true;
+            wallCrashFlag = true;
             anim.SetBool("slid", false);
             animTimer = 0;
             slidFlag = false;

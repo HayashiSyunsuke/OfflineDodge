@@ -10,6 +10,8 @@ public class wallCrash : MonoBehaviour
     bool crashFlag = false;
     public flagManager manager;
 
+    public slid slid;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,7 +21,7 @@ public class wallCrash : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (manager.flag == true)
+        if (slid.wallCrashFlag == true)
         {
             crashFlag = true;
         }
