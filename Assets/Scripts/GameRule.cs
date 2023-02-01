@@ -54,6 +54,11 @@ public class GameRule : MonoBehaviour
     [SerializeField]
     private CountSystem m_countSystem;
 
+    [SerializeField]
+    private float m_redTotalDamage = 0;
+    [SerializeField]
+    private float m_blueTotalDamage = 0;
+
     //赤チーム
     List<GameObject> redTeam = new List<GameObject>();
     //青チーム
@@ -144,21 +149,35 @@ public class GameRule : MonoBehaviour
         m_listPlayerData.Add(obj);
     }
 
+    public void TeamTotalDamage(float damage , LayerMask layer)
+    {
+        if(layer == 19)         //Redチーム
+        {
+            m_redTotalDamage += damage;
+        }
+        else if(layer == 20)    //Blueチーム
+        {
+            m_blueTotalDamage += damage;
+        }
+
+
+    }
+
     //勝敗判定
     public void JudgmentOfWin()
     {
         float red = 0;
         float blue = 0;
 
-        foreach (GameObject player in m_listPlayerData)
-        {
-            if (player.layer == 13)
-                red += player.GetComponent<ThirdPersonController>().HP;
+        //foreach (GameObject player in m_listPlayerData)
+        //{
+        //    if (player.layer == 13)
+        //        red += player.GetComponent<ThirdPersonController>().HP;
 
-            if (player.layer == 14)
-                blue += player.GetComponent<ThirdPersonController>().HP;
+        //    if (player.layer == 14)
+        //        blue += player.GetComponent<ThirdPersonController>().HP;
 
-        }
+        //}
 
 
         //レッドチームの総HPがゼロになったらフラグを立てる
@@ -361,6 +380,17 @@ public class GameRule : MonoBehaviour
     public float StartTime
     {
         get { return START_TIME; }
+    }
+
+    public float RedTeamTotal
+    {
+        get { return m_redTotalDamage; }
+        set { m_redTotalDamage = value; }
+    }
+    public float BlueTeamTotal
+    {
+        get { return m_blueTotalDamage; }
+        set { m_blueTotalDamage = value; }
     }
 
 }

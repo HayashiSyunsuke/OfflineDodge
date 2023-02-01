@@ -221,6 +221,10 @@ public class ThirdPersonController : MonoBehaviour
 
     [SerializeField] PlayerCounter playerCounter;
 
+    /*-----チーム------*/
+    [SerializeField]
+    private LayerMask m_teamLayer;
+
 
 #if ENABLE_INPUT_SYSTEM
     private PlayerInput playerInput;
@@ -401,6 +405,12 @@ public class ThirdPersonController : MonoBehaviour
 #endif
         //アニメーションIDを設定
         AssignAnimationIDs();
+
+        //チームのレイヤー設定
+        if (this.gameObject.layer == 13 || this.gameObject.layer == 17)         //Redチーム
+            m_teamLayer = 19;
+        else if (this.gameObject.layer == 14 || this.gameObject.layer == 18)    //Blueチーム
+            m_teamLayer = 20;
 
         //タイムアウト関連をリセットする
         jumpTimeoutDelta = JumpTimeout;
@@ -1643,6 +1653,12 @@ public class ThirdPersonController : MonoBehaviour
     {
         get { return cinemachineTargetYaw; }
         set { cinemachineTargetYaw = value; }
+    }
+
+    public LayerMask TeamLayer
+    {
+        get { return m_teamLayer; }
+        set { m_teamLayer = value; }
     }
 
 }

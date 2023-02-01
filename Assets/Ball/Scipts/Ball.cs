@@ -31,6 +31,8 @@ public class Ball : MonoBehaviour
     private int m_damage;
     [SerializeField]
     private GameObject m_throwObject;
+    [SerializeField]
+    private GameRule m_gameRule;        //ゲームルール
 
     //エフェクト関連
     private ParticleSystem m_particle;
@@ -143,7 +145,7 @@ public class Ball : MonoBehaviour
         m_useGravity = true;
         ResetThrowObject();
 
-        audioSource.PlayOneShot(BoundAudioClip, BoundSoundVolume);
+        //audioSource.PlayOneShot(BoundAudioClip, BoundSoundVolume);
 
         var tpc = collision.gameObject.GetComponent<ThirdPersonController>();
 
@@ -157,16 +159,17 @@ public class Ball : MonoBehaviour
             (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Enemy")   //タグが"Player"もしくは"Enemy"なら
             //&& !tpc.Dieing                                                                  //死亡してなければ 
             && m_hitValidity                                                                //ボールがバウンドしてなければ
-            && collision.gameObject.layer != m_teamLayer                                    //投げた人と違うチームなら
+            && tpc.TeamLayer != m_teamLayer                                    //投げた人と違うチームなら
             )
         {
 
-            tpc.HP -= m_damage;
+            tpc.HP -= m_damage;                                 //ダメージを与える
+            m_gameRule.TeamTotalDamage(m_damage,m_teamLayer);   //ダメージ値をゲームルールで加算する
 
             if (tpc.HP < 0)
             {
                 tpc.HP = 0;
-                tpc.Dieing = true;
+                //tpc.Dieing = true;
 
                 //enemy.GetComponent<ThirdPersonController>().Die();
                 //characterHp.DeadFlag = true;
