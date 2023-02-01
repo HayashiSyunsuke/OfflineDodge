@@ -113,6 +113,8 @@ public class Timer : MonoBehaviour
         }
     }
 
+
+    //セッター、ゲッター
     public bool StartFlag
     {
         set
@@ -122,6 +124,14 @@ public class Timer : MonoBehaviour
         get
         {
             return startFlag;
+        }
+    }
+
+    public int Minutes
+    {
+        get
+        {
+            return minutes;
         }
     }
 }
