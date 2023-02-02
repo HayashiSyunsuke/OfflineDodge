@@ -276,4 +276,10 @@ public class Ball : MonoBehaviour
         get { return m_hit; }
         set { m_hit = value; }
     }
+
+    public LayerMask TeamLayer
+    {
+        get { return m_teamLayer; }
+        set { m_teamLayer = value; }
+    }
 }
