@@ -22,6 +22,9 @@ public class CountSystem : MonoBehaviour
 
     private bool m_end = false;
 
+    [SerializeField]
+    Timer timerUI;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -54,6 +57,7 @@ public class CountSystem : MonoBehaviour
             {
                 m_startImage.gameObject.SetActive(false);
                 m_end = true;
+                timerUI.StartFlag = true;
             }
 
         }

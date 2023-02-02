@@ -34,6 +34,9 @@ public class Ball : MonoBehaviour
     [SerializeField]
     private GameRule m_gameRule;        //ゲームルール
 
+    [SerializeField]
+    private VSScoreGauge scoreUI;       //スコアのUI
+
     //エフェクト関連
     private ParticleSystem m_particle;
     private TrailRenderer m_trail;          //ボールのエフェクト
@@ -137,6 +140,31 @@ public class Ball : MonoBehaviour
         }
     }
 
+    public void TargetDownward(Vector3 vec)
+    {
+        Vector3 direction = new Vector3((vec.x - gameObject.transform.position.x), (vec.y - gameObject.transform.position.y) + 0.5f, (vec.z - gameObject.transform.position.z)).normalized;
+
+        //Vector3 velocity = new Vector3(direction.x, 0.0f, direction.y);
+
+        //力 ＝ 速さ × 重さ
+        Vector3 force = (direction * (m_ballSpeed + m_ballPower)) * m_rigidbody.mass;
+
+        m_rigidbody.AddForce(force, ForceMode.Impulse);
+        m_rigidbody.AddTorque(transform.right * (force.magnitude * m_RotationalForce), ForceMode.Impulse);
+
+        //ボールの加速値を入れる
+        if (m_ballPower < m_accelerationValueMax)
+        {
+            m_ballPower += m_accelerationValue;
+        }
+
+        //ボールの加速値が最大値を上回ったら最大値に戻す
+        if (m_ballPower > m_accelerationValueMax)
+        {
+            m_ballPower = m_accelerationValueMax;
+        }
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         if (m_throwObject == collision.gameObject)
@@ -165,6 +193,7 @@ public class Ball : MonoBehaviour
 
             tpc.HP -= m_damage;                                 //ダメージを与える
             m_gameRule.TeamTotalDamage(m_damage,m_teamLayer);   //ダメージ値をゲームルールで加算する
+            scoreUI.Damage(m_damage, m_teamLayer);
 
             if (tpc.HP < 0)
             {

@@ -242,7 +242,7 @@ public class ThirdPersonController : MonoBehaviour
     private bool hasAnimator;
 
     /*--------------------------DUBUG-------------------------*/
-    //上下の打ち分けデバッグ変数(0:頭 1:体 2:足)
+    //上下の打ち分けデバッグ変数(0:体 1:足)
     public int targetNumber = 0;
     //打ち分け用のキーを長押しさせないフラグ
     private bool isHold = false;
@@ -372,19 +372,22 @@ public class ThirdPersonController : MonoBehaviour
 
         if (playerNumber == 1)
         {
-            //controller.Move(new Vector3(0f, 0f, 3f));
             GameObject.FindWithTag("1PJoinUI").GetComponent<CharanterJoinUI>().JoinFlag = true;
-            //GameObject.Find("P1_Text").SetActive(false);
         }
-        else
+        else if (playerNumber == 2)
+        {
+            GameObject.FindWithTag("2PJoinUI").GetComponent<CharanterJoinUI>().JoinFlag = true;
+        }
+        else if (playerNumber == 3)
+        {
+            GameObject.FindWithTag("3PJoinUI").GetComponent<CharanterJoinUI>().JoinFlag = true;
+        }
+        else if (playerNumber == 4)
         {
             GameObject mr = GameObject.Find("Movement Restrictions");
             mr.SetActive(false);
-            //controller.Move(new Vector3(0f, 0f, -50f));
             mr.SetActive(true);
-            GameObject.FindWithTag("2PJoinUI").GetComponent<CharanterJoinUI>().JoinFlag = true;
-            //GameObject.Find("2P_Text").SetActive(false);
-
+            GameObject.FindWithTag("4PJoinUI").GetComponent<CharanterJoinUI>().JoinFlag = true;
         }
     }
 
@@ -889,7 +892,7 @@ public class ThirdPersonController : MonoBehaviour
             {
                 ball.gameObject.transform.parent = null;
                 ball.GetComponent<Rigidbody>().isKinematic = false;
-                ball.GetComponent<Ball>().CheckLayer(this.gameObject.layer);
+                ball.GetComponent<Ball>().CheckLayer(m_teamLayer);
                 ball.GetComponent<Ball>().CheckThrowObject(this.gameObject);
                 ball.GetComponent<Ball>().CollisionNullification(); //当たり判定を一時的に消す
 
@@ -899,7 +902,10 @@ public class ThirdPersonController : MonoBehaviour
                 }
                 else
                 {
-                    ball.GetComponent<Ball>().TargetStraight(CurrentTarget.transform.position);
+                    if(targetNumber == 0) //体
+                        ball.GetComponent<Ball>().TargetStraight(CurrentTarget.transform.position);
+                    else if(targetNumber == 1) //足
+                        ball.GetComponent<Ball>().TargetDownward(CurrentTarget.transform.position);
                 }
 
                 isBallHaving = false;
@@ -1219,11 +1225,11 @@ public class ThirdPersonController : MonoBehaviour
 
         switch (targetNumber)
         {
-            case 0:  //頭
+            case 0:  //体
 
                 //投げの処理↓
 
-                //体を狙う
+                //足を狙う
                 if (input.lower)
                 {
                     targetNumber = 1;
@@ -1231,34 +1237,14 @@ public class ThirdPersonController : MonoBehaviour
                     //input.lower = false;
                 }
                 break;
-            case 1:  //体
-
-                //投げの処理↓
-
-                //頭を狙う
-                if (input.upper)
-                {
-                    targetNumber = 0;
-                    isHold = true;
-                    //input.upper = false;
-                }
-
-                //足を狙う
-                if (input.lower)
-                {
-                    targetNumber = 2;
-                    isHold = true;
-                    //input.lower = false;
-                }
-                break;
-            case 2:  //足
+            case 1:  //足
 
                 //投げの処理
 
                 //体を狙う
                 if (input.upper)
                 {
-                    targetNumber = 1;
+                    targetNumber = 0;
                     isHold = true;
                     //input.upper = false;
                 }
