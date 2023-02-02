@@ -1659,15 +1659,15 @@ MonoBehaviour:
   FallTimeout: 0.15
   ThrowTimeout: 1.3
   DodgeTimeout: 0.8
-  CatchTimeout: 0.6
+  CatchTimeout: 0.665
   PassTimeout: 0.5
-  FaintTimeout: 0.5
+  FaintTimeout: 1.3
   Grounded: 1
   GroundedOffset: -0.14
   GroundedRadius: 0.28
   GroundLayers:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 2049
   HasBall: 0
   BallHitOffset: -0.05
   BallCheckRadius: 0.5

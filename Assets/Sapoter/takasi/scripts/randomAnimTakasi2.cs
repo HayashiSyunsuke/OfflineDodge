@@ -5,7 +5,7 @@ using UnityEngine;
 public class randomAnimTakasi2 : MonoBehaviour
 {
     private Animator anim;
-    int animTimer;
+    float animTimer;
     int rand;
     // Start is called before the first frame update
     void Start()
@@ -20,14 +20,15 @@ public class randomAnimTakasi2 : MonoBehaviour
         // ‰ñ“]‚µ‚È‚¢‚æ‚¤‚É‚·‚é
         this.transform.rotation = Quaternion.Euler(0, 180, 0);
 
-        animTimer++;
+        animTimer += Time.deltaTime;
 
-        if (animTimer >= 600)
-        {
-            rand = Random.Range(1, 4);
+        if (animTimer < 5.0f)
+            return;
 
-            animTimer = 0;
-        }
+        
+        rand = Random.Range(1, 4);
+
+        animTimer = 0;
 
         if (rand == 1)
         {
@@ -47,7 +48,7 @@ public class randomAnimTakasi2 : MonoBehaviour
         {
             anim.SetBool("kyodouhusin", true);
             anim.SetBool("yanki-", false);
-            anim.SetBool("sit_clap", false); ;
+            anim.SetBool("sit_clap", false);
         }
     }
 }

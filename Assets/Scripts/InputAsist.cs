@@ -10,15 +10,17 @@ public class InputAsist : MonoBehaviour
 	public Vector2 look;
 	public bool jump;
 	public bool sprint;
-	public bool throwing;
+	public bool ThrowingAndCatching;
 	public bool left;
 	public bool right;
 	public bool dodge;
-	public bool catching;
 	public bool pass;
 	public bool faint;
 	public bool untarget;
 	public bool returned;
+	public bool resuscitation;
+	public bool upper;
+	public bool lower;
 
 	[Header("Movement Settings")]
 	public bool analogMovement;
@@ -57,12 +59,13 @@ public class InputAsist : MonoBehaviour
 		Debug.Log("走る");
 	}
 
-	public void OnThrowing(InputAction.CallbackContext context)
+	public void OnThrowingAndCatching(InputAction.CallbackContext context)
 	{
 		//ThrowingInput(value.isPressed);
-		throwing = context.ReadValueAsButton();
-		Debug.Log("投げる");
+		ThrowingAndCatching = context.ReadValueAsButton();
+		Debug.Log("投げるorキャッチ");
 	}
+
 	public void OnLeftArrowState(InputAction.CallbackContext context)
 	{
 		//LeftArrowInput(value.isPressed);
@@ -81,12 +84,6 @@ public class InputAsist : MonoBehaviour
 		Debug.Log("回避");
 	}
 
-	public void OnCatch(InputAction.CallbackContext context)
-	{
-		catching = context.ReadValueAsButton();
-		Debug.Log("キャッチ");
-	}
-
 	public void OnPass(InputAction.CallbackContext context)
 	{
 		pass = context.ReadValueAsButton();
@@ -103,6 +100,22 @@ public class InputAsist : MonoBehaviour
 	{
 		untarget = context.ReadValueAsButton();
 	}
+
+	public void OnResuscitation(InputAction.CallbackContext context)
+	{
+		resuscitation = context.ReadValueAsButton();
+	}
+
+	public void OnUpper(InputAction.CallbackContext context)
+	{
+		upper = context.ReadValueAsButton();
+	}
+
+	public void OnLower(InputAction.CallbackContext context)
+	{
+		lower = context.ReadValueAsButton();
+	}
+
 
 	public void OnReturn(InputAction.CallbackContext context)
 	{

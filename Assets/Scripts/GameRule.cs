@@ -54,7 +54,19 @@ public class GameRule : MonoBehaviour
     [SerializeField]
     private CountSystem m_countSystem;
 
+    [SerializeField]
+    private float m_redTotalDamage = 0;
+    [SerializeField]
+    private float m_blueTotalDamage = 0;
 
+    //赤チーム
+    List<GameObject> redTeam = new List<GameObject>();
+    //青チーム
+    List<GameObject> blueTeam = new List<GameObject>();
+    //全体
+    List<ThirdPersonController> tpc = new List<ThirdPersonController>();
+    //一回だけ
+    bool flagOnce;
 
     // Start is called before the first frame update
     void Start()
@@ -67,6 +79,7 @@ public class GameRule : MonoBehaviour
         m_stanbyScene.SetActive(true);
         m_stanbyCamera.SetActive(true);
         m_ball.UseGravity = false;
+        
     }
 
     void FixedUpdate()
@@ -83,7 +96,7 @@ public class GameRule : MonoBehaviour
     void Update()
     {
         //プレイヤーが２人より少なければ return する
-        if (m_playerCounter.PlayerNum < 2)
+        if (m_playerCounter.PlayerNum < 4)
             return;
 
         if (m_sceneTimer >= 0.0f)
@@ -107,8 +120,14 @@ public class GameRule : MonoBehaviour
         //スタートフラグがTrueの時にラウンドをスタートする
         if (m_startFlag)
             StartRound();
-               
-       //リセットフラグがTrueの時にポジションをリセットする
+
+        if (!flagOnce)
+        {
+            SettingCharacterInfo();
+            flagOnce = true;
+        }
+
+        //リセットフラグがTrueの時にポジションをリセットする
         if (m_resetFlag)
         {
             //ボールに重力を加える
@@ -130,41 +149,55 @@ public class GameRule : MonoBehaviour
         m_listPlayerData.Add(obj);
     }
 
+    public void TeamTotalDamage(float damage , LayerMask layer)
+    {
+        if(layer == 19)         //Redチーム
+        {
+            m_redTotalDamage += damage;
+        }
+        else if(layer == 20)    //Blueチーム
+        {
+            m_blueTotalDamage += damage;
+        }
+
+
+    }
+
     //勝敗判定
     public void JudgmentOfWin()
     {
         float red = 0;
         float blue = 0;
 
-        foreach (GameObject player in m_listPlayerData)
-        {
-            if (player.layer == 13)
-                red += player.GetComponent<ThirdPersonController>().HP;
+        //foreach (GameObject player in m_listPlayerData)
+        //{
+        //    if (player.layer == 13)
+        //        red += player.GetComponent<ThirdPersonController>().HP;
 
-            if (player.layer == 14)
-                blue += player.GetComponent<ThirdPersonController>().HP;
+        //    if (player.layer == 14)
+        //        blue += player.GetComponent<ThirdPersonController>().HP;
 
-        }
+        //}
 
 
         //レッドチームの総HPがゼロになったらフラグを立てる
-        if ((int)red <= 0)
-        {
-            m_blueTeamWin = true;
+        //if ((int)red <= 0)
+        //{
+        //    m_blueTeamWin = true;
 
-            m_redTeamDown = true;
+        //    m_redTeamDown = true;
 
-            RoundUpdate();
-        }
-        //ブルーチームの総HPがゼロになったらフラグを立てる
-        else if ((int)blue <= 0)
-        {
-            m_redTeamWin = true;
+        //    RoundUpdate();
+        //}
+        ////ブルーチームの総HPがゼロになったらフラグを立てる
+        //else if ((int)blue <= 0)
+        //{
+        //    m_redTeamWin = true;
 
-            m_blueTeamDown = true;
+        //    m_blueTeamDown = true;
 
-            RoundUpdate();
-        }
+        //    RoundUpdate();
+        //}
 
     }
 
@@ -231,7 +264,7 @@ public class GameRule : MonoBehaviour
     public void ResetPosition()
     {
 
-        bool[] check = { false, false };
+        bool[] check = { false, false, false, false };
 
         //チーム別で位置を初期化する
         foreach (GameObject player in m_listPlayerData)
@@ -240,15 +273,18 @@ public class GameRule : MonoBehaviour
 
             foreach (GameObject spawnPoint in m_listSpawnPoints)
             {
-                if (player.layer == m_listSpawnPoints[num].gameObject.layer && !check[num])
+                if (player.layer == spawnPoint.gameObject.layer && !check[num])
                 {
-                    player.transform.position = m_listSpawnPoints[num].transform.position;  //位置の初期化
-                    player.transform.rotation = m_listSpawnPoints[num].transform.rotation;  //回転の初期化
+                    player.transform.position = spawnPoint.transform.position;  //位置の初期化
+                    player.transform.rotation = spawnPoint.transform.rotation;  //回転の初期化
+                    //player.GetComponent<ThirdPersonController>().CinemachineTargetYaw;
                     check[num] = true;
 
                     break;
                 }
                 num++;
+
+                
             }
         }
 
@@ -289,6 +325,39 @@ public class GameRule : MonoBehaviour
         
     }
 
+    private void SettingCharacterInfo()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            //奇数チーム
+            if (i % 2 == 1)
+            {
+                blueTeam.Add(m_listPlayerData[i]);
+                m_listPlayerData[i].GetComponent<ThirdPersonController>().CinemachineTargetYaw = 180;
+            }
+            //偶数チーム
+            if (i % 2 == 0)
+            {
+                redTeam.Add(m_listPlayerData[i]);
+            }
+
+            tpc.Add(m_listPlayerData[i].GetComponent<ThirdPersonController>());
+        }
+
+        tpc[0].SetEnemy = blueTeam;
+        tpc[0].SetAlly = redTeam[1];
+
+        tpc[1].SetEnemy = redTeam;
+        tpc[1].SetAlly = blueTeam[1];
+
+        tpc[2].SetEnemy = blueTeam;
+        tpc[2].SetAlly = redTeam[0];
+
+        tpc[3].SetEnemy = redTeam;
+        tpc[3].SetAlly = blueTeam[0];
+    }
+
+
     public void ResetTimer()
     {
         m_timer = START_TIME; 
@@ -311,6 +380,17 @@ public class GameRule : MonoBehaviour
     public float StartTime
     {
         get { return START_TIME; }
+    }
+
+    public float RedTeamTotal
+    {
+        get { return m_redTotalDamage; }
+        set { m_redTotalDamage = value; }
+    }
+    public float BlueTeamTotal
+    {
+        get { return m_blueTotalDamage; }
+        set { m_blueTotalDamage = value; }
     }
 
 }

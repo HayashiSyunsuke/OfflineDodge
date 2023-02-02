@@ -29,6 +29,10 @@ public class Ball : MonoBehaviour
     private float m_accelerationValueMax;   //加速値最大値
     [SerializeField]
     private int m_damage;
+    [SerializeField]
+    private GameObject m_throwObject;
+    [SerializeField]
+    private GameRule m_gameRule;        //ゲームルール
 
     //エフェクト関連
     private ParticleSystem m_particle;
@@ -108,11 +112,40 @@ public class Ball : MonoBehaviour
             m_ballPower = m_accelerationValueMax;
         }
     }
+    public void TargetStraight(Vector3 vec)
+    {
+        Vector3 direction = new Vector3((vec.x - gameObject.transform.position.x),0.0f,(vec.z - gameObject.transform.position.z)).normalized;
+
+        //Vector3 velocity = new Vector3(direction.x, 0.0f, direction.y);
+
+        //力 ＝ 速さ × 重さ
+        Vector3 force = (direction * (m_ballSpeed + m_ballPower)) * m_rigidbody.mass;
+
+        m_rigidbody.AddForce(force, ForceMode.Impulse);
+        m_rigidbody.AddTorque(transform.right * (force.magnitude * m_RotationalForce), ForceMode.Impulse);
+
+        //ボールの加速値を入れる
+        if (m_ballPower < m_accelerationValueMax)
+        {
+            m_ballPower += m_accelerationValue;
+        }
+
+        //ボールの加速値が最大値を上回ったら最大値に戻す
+        if (m_ballPower > m_accelerationValueMax)
+        {
+            m_ballPower = m_accelerationValueMax;
+        }
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (m_throwObject == collision.gameObject)
+            return;
+
         m_useGravity = true;
-        audioSource.PlayOneShot(BoundAudioClip, BoundSoundVolume);
+        ResetThrowObject();
+
+        //audioSource.PlayOneShot(BoundAudioClip, BoundSoundVolume);
 
         var tpc = collision.gameObject.GetComponent<ThirdPersonController>();
 
@@ -124,18 +157,19 @@ public class Ball : MonoBehaviour
 
         if (
             (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Enemy")   //タグが"Player"もしくは"Enemy"なら
-            && !tpc.Dieing                                                                  //死亡してなければ 
+            //&& !tpc.Dieing                                                                  //死亡してなければ 
             && m_hitValidity                                                                //ボールがバウンドしてなければ
-            && collision.gameObject.layer != m_teamLayer                                    //投げた人と違うチームなら
+            && tpc.TeamLayer != m_teamLayer                                    //投げた人と違うチームなら
             )
         {
 
-            tpc.HP -= m_damage;
+            tpc.HP -= m_damage;                                 //ダメージを与える
+            m_gameRule.TeamTotalDamage(m_damage,m_teamLayer);   //ダメージ値をゲームルールで加算する
 
             if (tpc.HP < 0)
             {
                 tpc.HP = 0;
-                tpc.Dieing = true;
+                //tpc.Dieing = true;
 
                 //enemy.GetComponent<ThirdPersonController>().Die();
                 //characterHp.DeadFlag = true;
@@ -168,6 +202,26 @@ public class Ball : MonoBehaviour
     public void ResetLayer()
     {
         m_teamLayer = 0;
+    }
+
+    public void CheckThrowObject(GameObject obj)
+    {
+        m_throwObject = obj;
+    }
+
+    public void ResetThrowObject()
+    {
+        m_throwObject = null;
+    }
+
+    public void CollisionNullification()
+    {
+        gameObject.GetComponent<SphereCollider>().enabled = false;
+    }
+
+    public void CollisionValidation()
+    {
+        gameObject.GetComponent<SphereCollider>().enabled = true;
     }
 
     public Vector3 Gravity
