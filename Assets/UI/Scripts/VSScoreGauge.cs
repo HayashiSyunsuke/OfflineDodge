@@ -47,4 +47,20 @@ public class VSScoreGauge : MonoBehaviour
             hitFlag = false;
         }
     }
+
+    public void Damage(float value, LayerMask layer)
+    {
+        scorePoint = value;
+
+        if (layer == 19)         //Redチーム
+        {
+            redBar.GetComponent<BarGauge>().Posy += scorePoint;
+            blueBar.GetComponent<BarGauge>().Posy += scorePoint;
+        }
+        else if (layer == 20)    //Blueチーム
+        {
+            redBar.GetComponent<BarGauge>().Posy -= scorePoint;
+            blueBar.GetComponent<BarGauge>().Posy -= scorePoint;
+        }
+    }
 }

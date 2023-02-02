@@ -34,6 +34,9 @@ public class Ball : MonoBehaviour
     [SerializeField]
     private GameRule m_gameRule;        //ゲームルール
 
+    [SerializeField]
+    private VSScoreGauge scoreUI;       //スコアのUI
+
     //エフェクト関連
     private ParticleSystem m_particle;
     private TrailRenderer m_trail;          //ボールのエフェクト
@@ -165,6 +168,7 @@ public class Ball : MonoBehaviour
 
             tpc.HP -= m_damage;                                 //ダメージを与える
             m_gameRule.TeamTotalDamage(m_damage,m_teamLayer);   //ダメージ値をゲームルールで加算する
+            scoreUI.Damage(m_damage, m_teamLayer);
 
             if (tpc.HP < 0)
             {
