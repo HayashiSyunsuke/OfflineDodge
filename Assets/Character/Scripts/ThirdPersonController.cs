@@ -60,6 +60,8 @@ public class ThirdPersonController : MonoBehaviour
     [Tooltip("Time required to pass before begin able to faint again")] public float FaintTimeout = 0.5f;
     //起き上がるまでの動作のクールタイム
     [Tooltip("Time required to wake up before begin able to wake up")] public float ResuscitableTimeout = 0.5f;
+    //再び動けるようになるまでの動作のクールタイム
+    [Tooltip("Time required to move before begin able to move again")] public float ChargeTimeout = 0.3f;
 
     /*-----プレイヤーと地面-----*/
     [Header("Player Grounded")]
@@ -120,6 +122,8 @@ public class ThirdPersonController : MonoBehaviour
     [Tooltip("If the character is Dieing or not")] public bool Dying = false;
 
     /*-----キャラクターの蘇生-----*/
+    //自己ヒール
+    public bool Charging = false;
     //キャラクターの蘇生範囲
     [Tooltip("Character resuscitation range")] private float ResuscitationRange = 1.0f;
     //蘇生可能フラグ
@@ -135,6 +139,10 @@ public class ThirdPersonController : MonoBehaviour
 
     /*-----ターゲット-----*/
     [Header("Current targets")] public GameObject CurrentTarget;
+
+    /*-----エモート-----*/
+    private bool[] Emote = { false, false, false, false };
+    private bool isEmote = false;
 
     /*-----シネマシーン-----*/
     [Header("Cinemachine")]
@@ -180,6 +188,7 @@ public class ThirdPersonController : MonoBehaviour
     private float passTimeoutDelta;
     private float faintTimeoutDelta;
     private float resuscitableTimeoutDelta;
+    private float chargeTimeoutDelta;
 
     //アニメーションID
     private int animIDSpeed;
@@ -197,6 +206,10 @@ public class ThirdPersonController : MonoBehaviour
     private int animIDFront;
     private int animIDSide;
     private int animIDResuscitation;
+    private int animIDCharge;
+    private int animIDEmote1;
+    private int animIDEmote2;
+    private int animIDEmote3;
 
     //ボールを投げたか
     private bool Throwed = false;
@@ -424,6 +437,7 @@ public class ThirdPersonController : MonoBehaviour
         passTimeoutDelta = PassTimeout;
         faintTimeoutDelta = FaintTimeout;
         resuscitableTimeoutDelta = ResuscitableTimeout;
+        chargeTimeoutDelta = ChargeTimeout;
     }
 
     private void Update()
@@ -455,6 +469,8 @@ public class ThirdPersonController : MonoBehaviour
 
             Revival();
             Resuscitation();
+            PlayEmote();
+            Charge();
 
             //DEBUG↓↓↓
             ReturnBall();
@@ -485,6 +501,10 @@ public class ThirdPersonController : MonoBehaviour
         animIDFront = Animator.StringToHash("Front");
         animIDSide = Animator.StringToHash("Side");
         animIDResuscitation = Animator.StringToHash("Resuscitation");
+        animIDCharge = Animator.StringToHash("Charge");
+        animIDEmote1 = Animator.StringToHash("Emote1");
+        animIDEmote2 = Animator.StringToHash("Emote2");
+        animIDEmote3 = Animator.StringToHash("Emote3");
     }
 
     /// <summary>
@@ -672,6 +692,8 @@ public class ThirdPersonController : MonoBehaviour
         // 入力がある場合にプレイヤーを回転させる
         if (input.move != Vector2.zero)
         {
+            ResetEmote();
+
             targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
 
             float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref rotationVelocity, RotationSmoothTime);
@@ -1218,6 +1240,18 @@ public class ThirdPersonController : MonoBehaviour
         input.faint = false;
     }
 
+    private void DropBall()
+    {
+        GameObject ball = GameObject.FindWithTag("Ball1");
+
+        ball.gameObject.transform.parent = null;
+        ball.GetComponent<Rigidbody>().isKinematic = false;
+        ball.GetComponent<Ball>().CheckLayer(this.gameObject.layer);
+        ball.GetComponent<Ball>().CheckThrowObject(this.gameObject);
+        //ball.GetComponent<Ball>().CollisionNullification(); //当たり判定を一時的に消す
+        ball.GetComponent<Ball>().UseGravity = true;
+    }
+
     private void TargetArea()
     {
         //ターゲットしていなかったらリターン
@@ -1279,8 +1313,83 @@ public class ThirdPersonController : MonoBehaviour
             animator.SetBool(animIDDie, Dying);
 
             CinemachineCameraTarget.transform.localPosition = new Vector3(0.0f,0.2f,0.0f);
+
+            if (isBallHaving)
+                DropBall();
         }
     }
+
+    /// <summary>
+    /// 自己ヒール
+    /// </summary>
+    private void Charge()
+    {
+        if (Grounded && !isJumpFlag && !isBallHaving && !Reanimated)
+        {
+            //ヒール
+            if (input.resuscitation && hp < 100)
+            {
+                if (hasAnimator)
+                {
+                    //ヒール
+                    Charging = true;
+
+                    //動けないようにする
+                    freeze = true;
+
+                    //体力を徐々に回復する
+                    hp += 0.5f;
+
+                    //アニメーターのパラメータに生き返る情報を入れる
+                    animator.SetBool(animIDCharge, Charging);
+
+                    if (newEffect == null)
+                    {
+                        //パーティクル
+                        newEffect = Instantiate(m_soseiParticle);
+                        newEffect.transform.position = transform.position;
+                        newEffect.Play();
+                    }
+                }
+            }
+            else
+            {
+                //蘇生が終わった後だけ入る
+                if (Charging)
+                {
+                    //アニメーターのパラメータに蘇生情報を入れる
+                    animator.SetBool(animIDCharge, false);
+
+                    if (newEffect != null)
+                    {
+                        Destroy(newEffect.gameObject);
+                        newEffect.Stop();
+                    }
+
+                    //時間が残っていたら減らす
+                    if (chargeTimeoutDelta >= 0.0f)
+                    {
+                        chargeTimeoutDelta -= Time.deltaTime;
+                    }
+                    else
+                    {
+                        if (hasAnimator)
+                        {
+                            //蘇生を終了する
+                            Charging = false;
+
+                            //動けるようにする
+                            freeze = false;
+
+                            //投げるデルタタイムをリセット
+                            chargeTimeoutDelta = ChargeTimeout;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
     /// <summary>
     /// 復活(自動的にHPが回復する&HPがMAXになったら復活)
@@ -1343,6 +1452,9 @@ public class ThirdPersonController : MonoBehaviour
 
                 //HPを高速回復する
                 allyGameObject.GetComponent<ThirdPersonController>().HP += 0.5f;
+
+                //自身のHPも少しずつ回復する
+                hp += 0.1f;
             }
         }
         else
@@ -1439,6 +1551,65 @@ public class ThirdPersonController : MonoBehaviour
             }
         }
     }
+
+    private void PlayEmote()
+    {
+        if (isJumpFlag || freeze || isBallHaving) return;
+
+        if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Idle Walk Run Blend") &&
+            !animator.GetCurrentAnimatorStateInfo(0).IsName("Dance1") &&
+            !animator.GetCurrentAnimatorStateInfo(0).IsName("Dance2") &&
+            !animator.GetCurrentAnimatorStateInfo(0).IsName("Dance3")) return;
+
+        if (input.emote1)
+        {
+            ResetEmote();
+
+            Emote[0] = true;
+            animator.SetBool(animIDEmote1, Emote[0]);
+
+            isEmote = true;
+        }
+        else if (input.emote2)
+        {
+            ResetEmote();
+
+            Emote[1] = true;
+            animator.SetBool(animIDEmote2, Emote[1]);
+
+            isEmote = true;
+        }
+        else if (input.emote3)
+        {
+            ResetEmote();
+
+            Emote[2] = true;
+            animator.SetBool(animIDEmote3, Emote[2]);
+
+            isEmote = true;
+        }
+    }
+
+    private void ResetEmote()
+    {
+        if (!isEmote) return;
+
+        for (int i = 0; i < 3; i++)
+        {
+            Emote[i] = false;
+            if (i == 0)
+                animator.SetBool(animIDEmote1, Emote[i]);
+
+            if (i == 1)
+                animator.SetBool(animIDEmote2, Emote[i]);
+
+            if (i == 2)
+                animator.SetBool(animIDEmote3, Emote[i]);
+
+            isEmote = false;
+        }
+    }
+
 
 
     /// <summary>

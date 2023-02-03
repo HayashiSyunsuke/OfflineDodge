@@ -768,6 +768,54 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 0e5d44db-9b13-4808-a7b3-a50d161b1da7
     m_ActionName: Player/LowerTarget[/XInputControllerWindows/rightStick/down]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3189884408005146061}
+        m_TargetAssemblyTypeName: InputAsist, Assembly-CSharp
+        m_MethodName: OnEmote1
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: fa54d199-35d3-42a7-962b-e01d33fdc8aa
+    m_ActionName: Player/Emote1[/XInputControllerWindows/dpad/up]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3189884408005146061}
+        m_TargetAssemblyTypeName: InputAsist, Assembly-CSharp
+        m_MethodName: OnEmote2
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: d6d4cb0f-a807-476b-8296-160348539b99
+    m_ActionName: Player/Emote2[/XInputControllerWindows/dpad/right]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3189884408005146061}
+        m_TargetAssemblyTypeName: InputAsist, Assembly-CSharp
+        m_MethodName: OnEmote3
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 5b85d940-46de-44bd-b77f-c3feb51bd573
+    m_ActionName: Player/Emote3[/XInputControllerWindows/dpad/down]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Gamepad
   m_DefaultActionMap: Player
@@ -823,12 +871,13 @@ MonoBehaviour:
   Gravity: -15
   JumpTimeout: 0.3
   FallTimeout: 0.15
-  ThrowTimeout: 1.3
+  ThrowTimeout: 1.5
   DodgeTimeout: 0.8
   CatchTimeout: 0.63
   PassTimeout: 0.5
-  FaintTimeout: 1.3
-  ResuscitableTimeout: 0.5
+  FaintTimeout: 1.4
+  ResuscitableTimeout: 1.3
+  ChargeTimeout: 0.6
   Grounded: 1
   GroundedOffset: -0.14
   GroundedRadius: 0.28
@@ -851,6 +900,7 @@ MonoBehaviour:
   Dodging: 0
   Catching: 0
   Dying: 0
+  Charging: 0
   resuscitable: 0
   Reanimated: 0
   freeze: 0
@@ -871,6 +921,9 @@ MonoBehaviour:
   virtualCamera: {fileID: 4770107620362845166}
   rectTransform: {fileID: 7649809903424262857}
   playerCounter: {fileID: 0}
+  m_teamLayer:
+    serializedVersion: 2
+    m_Bits: 0
   targetNumber: 0
 --- !u!82 &-8892178622847219203
 AudioSource:
@@ -995,6 +1048,9 @@ MonoBehaviour:
   resuscitation: 0
   upper: 0
   lower: 0
+  emote1: 0
+  emote2: 0
+  emote3: 0
   analogMovement: 0
   cursorLocked: 1
   cursorInputForLook: 1

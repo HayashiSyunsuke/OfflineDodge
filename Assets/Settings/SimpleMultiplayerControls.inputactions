@@ -124,6 +124,30 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "Emote1",
+                    "type": "Button",
+                    "id": "fa54d199-35d3-42a7-962b-e01d33fdc8aa",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Emote2",
+                    "type": "Button",
+                    "id": "d6d4cb0f-a807-476b-8296-160348539b99",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Emote3",
+                    "type": "Button",
+                    "id": "5b85d940-46de-44bd-b77f-c3feb51bd573",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -443,6 +467,39 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "ThrowAndCatch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4981ab1e-0686-4034-8ce6-a80fa499b3b6",
+                    "path": "<Gamepad>/dpad/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Emote1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "709b4d4e-9ce8-4d54-bff3-9048a65ab183",
+                    "path": "<Gamepad>/dpad/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Emote2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "41d2e7c3-161e-46db-a63e-18f94265a6f2",
+                    "path": "<Gamepad>/dpad/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Emote3",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

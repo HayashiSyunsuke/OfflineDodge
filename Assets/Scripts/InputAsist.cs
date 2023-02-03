@@ -21,6 +21,9 @@ public class InputAsist : MonoBehaviour
 	public bool resuscitation;
 	public bool upper;
 	public bool lower;
+	public bool emote1;
+	public bool emote2;
+	public bool emote3;
 
 	[Header("Movement Settings")]
 	public bool analogMovement;
@@ -120,6 +123,21 @@ public class InputAsist : MonoBehaviour
 	public void OnReturn(InputAction.CallbackContext context)
 	{
 		returned = context.ReadValueAsButton();
+	}
+
+	public void OnEmote1(InputAction.CallbackContext context)
+	{
+		emote1 = context.ReadValueAsButton();
+	}
+
+	public void OnEmote2(InputAction.CallbackContext context)
+	{
+		emote2 = context.ReadValueAsButton();
+	}
+
+	public void OnEmote3(InputAction.CallbackContext context)
+	{
+		emote3 = context.ReadValueAsButton();
 	}
 
 
