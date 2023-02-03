@@ -516,7 +516,11 @@ public class ThirdPersonController : MonoBehaviour
         if (HasBall && Grounded && !Dodging)
         {
             //photonView.RPC(nameof(PickUpBall), RpcTarget.All, this.gameObject);
-            PickUpBall();
+
+            Ball ball = GameObject.FindWithTag("Ball1").GetComponent<Ball>();
+
+            if (m_teamLayer == ball.TeamLayer || ball.TeamLayer == 0)
+                PickUpBall();
         }
     }
 
