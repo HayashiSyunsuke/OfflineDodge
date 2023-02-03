@@ -134,4 +134,12 @@ public class Timer : MonoBehaviour
             return minutes;
         }
     }
+
+    public float TotalTime
+    {
+        get 
+        { 
+            return totalTime; 
+        }
+    }
 }

@@ -50,6 +50,8 @@ public class GameRule : MonoBehaviour
     private bool m_blueTeamDown = false;
     [SerializeField]
     private bool m_startFlag = false;
+    [SerializeField]
+    private bool m_resultFlag = false;
 
     [SerializeField]
     private CountSystem m_countSystem;
@@ -58,6 +60,9 @@ public class GameRule : MonoBehaviour
     private float m_redTotalDamage = 0;
     [SerializeField]
     private float m_blueTotalDamage = 0;
+    [SerializeField]
+    private Timer m_timeLimit;
+
 
     //赤チーム
     List<GameObject> redTeam = new List<GameObject>();
@@ -89,7 +94,7 @@ public class GameRule : MonoBehaviour
             return;
 
         //勝敗を判定する
-        JudgmentOfWin();
+        //JudgmentOfWin();
     }
 
     // Update is called once per frame
@@ -120,6 +125,14 @@ public class GameRule : MonoBehaviour
         //スタートフラグがTrueの時にラウンドをスタートする
         if (m_startFlag)
             StartRound();
+
+        if (m_timeLimit.TotalTime <= 0.0f && !m_resultFlag)
+        {
+            JudgmentOfWin();
+            m_resultFlag = true;
+        }
+            
+
 
         if (!flagOnce)
         {
@@ -166,38 +179,34 @@ public class GameRule : MonoBehaviour
     //勝敗判定
     public void JudgmentOfWin()
     {
-        float red = 0;
-        float blue = 0;
-
-        //foreach (GameObject player in m_listPlayerData)
-        //{
-        //    if (player.layer == 13)
-        //        red += player.GetComponent<ThirdPersonController>().HP;
-
-        //    if (player.layer == 14)
-        //        blue += player.GetComponent<ThirdPersonController>().HP;
-
-        //}
 
 
-        //レッドチームの総HPがゼロになったらフラグを立てる
-        //if ((int)red <= 0)
-        //{
-        //    m_blueTeamWin = true;
 
-        //    m_redTeamDown = true;
+        //与えたダメージの合計が高いほうの勝利
 
-        //    RoundUpdate();
-        //}
-        ////ブルーチームの総HPがゼロになったらフラグを立てる
-        //else if ((int)blue <= 0)
-        //{
-        //    m_redTeamWin = true;
+        //Blueチームの勝利
+        if (m_redTotalDamage < m_blueTotalDamage)
+        {
+            //Blueチームの勝利演出
 
-        //    m_blueTeamDown = true;
+            Debug.Log("青チームの勝ち");
 
-        //    RoundUpdate();
-        //}
+        }
+        //Redチームの勝利
+        else if(m_redTotalDamage > m_blueTotalDamage)
+        {
+            //Redチームの勝利演出
+
+            Debug.Log("赤チームの勝ち");
+
+        }
+        //引き分け
+        else if (m_redTotalDamage == m_blueTotalDamage)        
+        {
+            //引き分けの演出
+
+            Debug.Log("引き分けでやんす");
+        }
 
     }
 
@@ -230,34 +239,8 @@ public class GameRule : MonoBehaviour
 
     public void VictoryOrDefeatDirection()
     {
-
-        if (m_redTeamCurrentRounds == m_blueTeamCurrentRounds)
-        {
-            //レッドチームに引き分け演出
-
-
-            //ブルーチームに引き分け演出
-
-
-        }
-        else if (m_redTeamCurrentRounds < m_blueTeamCurrentRounds)
-        {
-            //レッドチームに負け演出
-
-
-            //ブルーチームに勝ち演出
-
-
-        }
-        else if (m_redTeamCurrentRounds > m_blueTeamCurrentRounds)
-        {
-            //レッドチームに勝ち演出
-
-
-            //ブルーチームに負け演出
-
-
-        }
+        
+        
     }
 
     //位置をリセットする　対象： プレイヤー ＆ ボール
