@@ -130,6 +130,7 @@ public class GameRule : MonoBehaviour
         {
             JudgmentOfWin();
             m_resultFlag = true;
+            m_countSystem.TimeUp();
         }
             
 

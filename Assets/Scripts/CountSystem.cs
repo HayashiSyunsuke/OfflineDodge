@@ -7,8 +7,12 @@ public class CountSystem : MonoBehaviour
 {
     [SerializeField]
     private List<Image> m_numbersImage;
+
     [SerializeField]
-    private Image m_startImage;
+    private GameObject m_readyImage;
+
+    [SerializeField]
+    private GameObject m_timeUpImage;
 
     private float m_startCount;
 
@@ -42,55 +46,32 @@ public class CountSystem : MonoBehaviour
     {
         m_startCount = m_gameRule.Timer;
 
+        m_count -= Time.deltaTime;
+
+        //m_timeUpImage.gameObject.SetActive(false);
+
+        if (m_count < 0.0f)
+            m_readyImage.gameObject.SetActive(true);
+
+
         if (m_startCount <= 0.0f)
         {
-            m_count -= Time.deltaTime;
 
-            foreach (Image image in m_numbersImage)
-            {
-                image.gameObject.SetActive(false);
-            }
-
-            m_startImage.gameObject.SetActive(true);
 
             if (m_count <= 0.0f)
             {
-                m_startImage.gameObject.SetActive(false);
+                //m_timeUpImage.gameObject.SetActive(false);
                 m_end = true;
                 timerUI.StartFlag = true;
             }
 
         }
-        else
-        {
-            int time = (int)m_startCount + 1;
 
-            m_startImage.gameObject.SetActive(false);
+    }
 
-            if (time <= 3)
-            {
-                if (time <= 1)
-                {
-                    m_numbersImage[0].gameObject.SetActive(true);
-                    m_numbersImage[1].gameObject.SetActive(false);
-                    m_numbersImage[2].gameObject.SetActive(false);
-                }
-                else if (time <= 2)
-                {
-                    m_numbersImage[1].gameObject.SetActive(true);
-                    m_numbersImage[2].gameObject.SetActive(false);
-                    m_numbersImage[0].gameObject.SetActive(false);
-                }
-                else if (time <= 3)
-                {
-                    m_numbersImage[2].gameObject.SetActive(true);
-                    m_numbersImage[1].gameObject.SetActive(false);
-                    m_numbersImage[0].gameObject.SetActive(false);
-                }
-
-            }
-        }
-
+    public void TimeUp()
+    {
+        m_timeUpImage.gameObject.SetActive(true);
     }
 
     public void ResetCount()
