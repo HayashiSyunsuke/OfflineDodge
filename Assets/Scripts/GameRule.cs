@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.UI;
 using UnityEngine;
 
 
@@ -64,6 +65,15 @@ public class GameRule : MonoBehaviour
     private Timer m_timeLimit;
 
 
+    [SerializeField]
+    private GameObject m_rawImage;
+    [SerializeField]
+    private float VIDEO_TIMER;
+
+    private float m_videoTimer;
+    private bool m_flagOnce;
+
+
     //赤チーム
     List<GameObject> redTeam = new List<GameObject>();
     //青チーム
@@ -78,13 +88,17 @@ public class GameRule : MonoBehaviour
     {
         m_timer = START_TIME;
         m_sceneTimer = ChangeSceneTime;
-        m_startFlag = true;
+        m_startFlag = false;
         m_resetFlag = true;
         m_playerUICanvas.SetActive(false);
         m_stanbyScene.SetActive(true);
         m_stanbyCamera.SetActive(true);
         m_ball.UseGravity = false;
-        
+        m_rawImage.SetActive(false);
+        m_videoTimer = VIDEO_TIMER;
+        m_flagOnce = false;
+
+
     }
 
     void FixedUpdate()
@@ -100,7 +114,7 @@ public class GameRule : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //プレイヤーが２人より少なければ return する
+        //プレイヤーが４人より少なければ return する
         if (m_playerCounter.PlayerNum < 4)
             return;
 
@@ -121,6 +135,20 @@ public class GameRule : MonoBehaviour
         //アクティブ状態なら非アクティブにする
         if (m_stanbyCamera.activeSelf)
             m_stanbyCamera.SetActive(false);
+
+        if (!m_rawImage.activeSelf && !m_flagOnce)
+            m_rawImage.SetActive(true);
+
+        m_videoTimer -= Time.deltaTime;
+
+        if (m_videoTimer <= 0.0f && !m_flagOnce)
+        {
+            m_flagOnce = true;
+            m_startFlag = true;
+
+            m_rawImage.SetActive(false);
+        }
+            
 
         //スタートフラグがTrueの時にラウンドをスタートする
         if (m_startFlag)

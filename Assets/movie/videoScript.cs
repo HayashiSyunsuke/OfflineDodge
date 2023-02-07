@@ -13,6 +13,7 @@ public class videoScript : MonoBehaviour
         image = GetComponent<RawImage>();
         player = GetComponent<VideoPlayer>();
         var source = GetComponent<AudioSource>();
+        source.volume = 0.01f;
         player.EnableAudioTrack(0, true);
         player.SetTargetAudioSource(0, source);
     }
