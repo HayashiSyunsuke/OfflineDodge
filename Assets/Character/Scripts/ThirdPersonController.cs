@@ -110,6 +110,10 @@ public class ThirdPersonController : MonoBehaviour
     [Header("Player Dodging")]
     //キャラクターが避けているか
     [Tooltip("If the character is dodging or not")] public bool Dodging = false;
+    //避けのクールタイム
+    public float dodgingCooltime = 2.0f;
+    public float dodgingCooltimeDelta = 2.0f;
+    public bool isDodgeEnable = true;
 
     /*-----キャッチ-----*/
     [Header("PlayerCatching")]
@@ -882,6 +886,11 @@ public class ThirdPersonController : MonoBehaviour
         {
             verticalVelocity += Gravity * Time.deltaTime;
         }
+
+        if (freeze)
+        {
+            controller.Move(new Vector3(0.0f, verticalVelocity, 0.0f) * Time.deltaTime);
+        }
     }
 
     /// <summary>
@@ -980,30 +989,41 @@ public class ThirdPersonController : MonoBehaviour
     /// </summary>
     private void Dodge()
     {
+        if (dodgingCooltimeDelta <= 0f)
+        {
+            dodgingCooltimeDelta = dodgingCooltime;
+            isDodgeEnable = true;
+        }
+
+        else if (!isDodgeEnable)
+        {
+            dodgingCooltimeDelta -= Time.deltaTime;
+            return;
+        }
+
         if (CurrentTarget != null) return;
 
-        if (!coolTime.CoolTimeFlag)
+
+        if (Grounded)
         {
-            if (Grounded)
+            //避けるキーが押されたら
+            if (input.dodge && !isBallHaving && Grounded && !isJumpFlag && !freeze)
             {
-                //避けるキーが押されたら
-                if (input.dodge && !isBallHaving && Grounded && !isJumpFlag && !freeze)
+                if (hasAnimator)
                 {
-                    if (hasAnimator)
-                    {
-                        //回避する
-                        Dodging = true;
+                    //回避する
+                    Dodging = true;
 
-                        //動けなくする
-                        freeze = true;
+                    //動けなくする
+                    freeze = true;
 
-                        coolTime.CoolTimeFlag = Dodging;
-                        //アニメータのパラメータに情報を入れる
-                        animator.SetBool(animIDDodge, Dodging);
-                    }
+                    coolTime.CoolTimeFlag = Dodging;
+                    //アニメータのパラメータに情報を入れる
+                    animator.SetBool(animIDDodge, Dodging);
                 }
             }
         }
+        
 
         if (Dodging)
         {
@@ -1017,6 +1037,8 @@ public class ThirdPersonController : MonoBehaviour
             if (dodgeTimeoutDelta >= 0.0f)
             {
                 dodgeTimeoutDelta -= Time.deltaTime;
+
+                hp -= 0.1f;
             }
             //回避時間が残っていなかったらアニメーターを更新する
             else
@@ -1038,6 +1060,9 @@ public class ThirdPersonController : MonoBehaviour
         {
             //避けるデルタタイムをリセット
             dodgeTimeoutDelta = DodgeTimeout;
+
+            //再び押せるようにする
+            input.dodge = false;
         }
     }
 
@@ -1213,6 +1238,8 @@ public class ThirdPersonController : MonoBehaviour
                 if (faintTimeoutDelta >= 0.0f)
                 {
                     faintTimeoutDelta -= Time.deltaTime;
+
+                    hp -= 0.05f;
                 }
                 else
                 {
@@ -1305,6 +1332,8 @@ public class ThirdPersonController : MonoBehaviour
 
             //死ぬ
             Dying = true;
+
+            hp = 0;
 
             //動けなくする
             freeze = true;
@@ -1409,6 +1438,8 @@ public class ThirdPersonController : MonoBehaviour
 
                 //動けるようにする
                 freeze = false;
+
+                hp = 100;
 
                 //アニメーターのパラメータに生き返る情報を入れる
                 animator.SetBool(animIDDie, Dying);
@@ -1588,6 +1619,11 @@ public class ThirdPersonController : MonoBehaviour
 
             isEmote = true;
         }
+
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Dance1") ||
+           animator.GetCurrentAnimatorStateInfo(0).IsName("Dance2") ||
+           animator.GetCurrentAnimatorStateInfo(0).IsName("Dance3") ||
+           animator.GetCurrentAnimatorStateInfo(0).IsName("Dance4")) hp -= 0.03f;
     }
 
     private void ResetEmote()
