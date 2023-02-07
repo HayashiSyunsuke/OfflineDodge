@@ -73,7 +73,7 @@ public class ChangeScene : MonoBehaviour
     //クリックしたら
     public void OnClick()
     {
-        flag = true;
+        //flag = true;
     }
 
     //スペースもしくは〇を押したら
