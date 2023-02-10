@@ -47,7 +47,7 @@ public class StartButton : MonoBehaviour
 
         if(fade.FadeIn(image, 1.0f))
         {
-            SceneManager.LoadScene("SampleScene");
+            SceneManager.LoadScene("animationScene");
         }
     }
 }

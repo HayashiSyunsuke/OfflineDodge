@@ -816,6 +816,10 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 5b85d940-46de-44bd-b77f-c3feb51bd573
     m_ActionName: Player/Emote3[/XInputControllerWindows/dpad/down]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: fa5ae3de-6cde-44eb-bf25-badc963b36f5
+    m_ActionName: ChangeScene/ChangeScene[/DualShock4GamepadHID/buttonEast,/DualShock4GamepadHID/buttonNorth,/DualShock4GamepadHID/buttonSouth,/DualShock4GamepadHID/buttonWest,/DualShock4GamepadHID/leftShoulder,/DualShock4GamepadHID/rightShoulder,/DualShock4GamepadHID/leftTrigger,/DualShock4GamepadHID/rightTrigger,/DualShock4GamepadHID/dpad/down,/DualShock4GamepadHID/dpad/left,/DualShock4GamepadHID/dpad/right,/DualShock4GamepadHID/dpad/up,/DualShock4GamepadHID/start,/DualShock4GamepadHID/select,/DualShock4GamepadHID/leftStickPress,/DualShock4GamepadHID/rightStickPress]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Gamepad
   m_DefaultActionMap: Player
@@ -898,6 +902,9 @@ MonoBehaviour:
   Fainting: 0
   Dieing: 0
   Dodging: 0
+  dodgingCooltime: 2
+  dodgingCooltimeDelta: 2
+  isDodgeEnable: 1
   Catching: 0
   Dying: 0
   Charging: 0
@@ -1152,7 +1159,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7649809903424262857
 RectTransform:
   m_ObjectHideFlags: 0
