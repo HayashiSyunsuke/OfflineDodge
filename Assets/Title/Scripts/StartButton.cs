@@ -13,6 +13,7 @@ public class StartButton : MonoBehaviour
     [SerializeField] Image image;
     [SerializeField] AudioSource audio;
     private bool isStart = false;
+    private AudioSource m_audio;
 
 #if ENABLE_INPUT_SYSTEM
     private PlayerInput playerInput;
@@ -29,6 +30,7 @@ public class StartButton : MonoBehaviour
 #endif
 
         input = GetComponent<ChangeSampleScene>();
+        m_audio = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -39,7 +41,11 @@ public class StartButton : MonoBehaviour
         if (!isEndFade) return;
 
         if (input.start)
+        {
             isStart = true;
+            m_audio.Play();
+        }
+           
 
         if (!isStart) return;
 
