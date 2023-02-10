@@ -227,6 +227,13 @@ public class ThirdPersonController : MonoBehaviour
     [SerializeField] private bool m_isOperation;
 
     /*-----ÉXÉLÉã-----*/
+    [SerializeField] GameObject targetUI;
+    RectTransform targetUIRect;
+    bool isStartTargetUI = false;
+    [SerializeField] float sinkoudo = 0;
+    bool isDown = false;
+    bool isUp = true;
+
     [SerializeField] private GameObject canvas;
 
     public CoolTime coolTime;
@@ -297,6 +304,9 @@ public class ThirdPersonController : MonoBehaviour
 
             this.gameObject.name = "FemaleDummy" + playerCounter.PlayerNum;
             GameObject.FindWithTag("PlayerCanvas").SetActive(false);
+            targetUIRect = targetUI.GetComponent<RectTransform>();
+            targetUI.SetActive(false);
+
 
             if (playerCounter.PlayerNum == 1)
             {
@@ -305,7 +315,7 @@ public class ThirdPersonController : MonoBehaviour
 
                 camera.cullingMask &= ~(1 << 14 << 17 << 18);
 
-                rectTransform.localPosition = new Vector2(-480f, 0f);
+                //rectTransform.localPosition = new Vector2(-480f, 0f);
 
                 playerNumber = 1;
 
@@ -318,7 +328,7 @@ public class ThirdPersonController : MonoBehaviour
 
                 camera.cullingMask &= ~(1 << 13 << 17 << 18);
 
-                rectTransform.localPosition = new Vector2(480f, 0f);
+                //rectTransform.localPosition = new Vector2(480f, 0f);
 
                 GameObject p1 = GameObject.Find("FemaleDummy1");
                 GameObject p2 = GameObject.Find("FemaleDummy2");
@@ -343,7 +353,7 @@ public class ThirdPersonController : MonoBehaviour
 
                 camera.cullingMask &= ~(1 << 13 << 14 << 18);
 
-                rectTransform.localPosition = new Vector2(480f, 0f);
+                //rectTransform.localPosition = new Vector2(480f, 0f);
 
                 GameObject p1 = GameObject.Find("FemaleDummy1");
                 GameObject p2 = GameObject.Find("FemaleDummy2");
@@ -368,7 +378,7 @@ public class ThirdPersonController : MonoBehaviour
 
                 camera.cullingMask &= ~(1 << 13 << 14 << 17);
 
-                rectTransform.localPosition = new Vector2(480f, 0f);
+                //rectTransform.localPosition = new Vector2(480f, 0f);
 
                 GameObject p1 = GameObject.Find("FemaleDummy1");
                 GameObject p2 = GameObject.Find("FemaleDummy2");
@@ -475,6 +485,8 @@ public class ThirdPersonController : MonoBehaviour
             Resuscitation();
             PlayEmote();
             Charge();
+
+            ChangeTargetUI();
 
             //DEBUGÅ´Å´Å´
             ReturnBall();
@@ -1583,7 +1595,66 @@ public class ThirdPersonController : MonoBehaviour
         }
     }
 
-    private void PlayEmote()
+    private void ChangeTargetUI()
+    {
+        if(CurrentTarget)
+        {
+            targetUI.SetActive(true);
+
+            //ãπ
+            if(targetNumber == 0)
+            {
+                targetUI.transform.position = CurrentTarget.transform.root.Find("ChestPosition").transform.position;
+            }
+                
+            //ë´
+            if(targetNumber == 1)
+            {
+                targetUI.transform.position = CurrentTarget.transform.root.Find("LegPosition").transform.position;
+            }
+
+            MovingTargetUI();
+        }
+        else
+        {
+            if(targetUI != null)
+            targetUI.SetActive(false);
+        }
+    }
+
+    private void MovingTargetUI()
+    {
+        if(sinkoudo >= 1f)
+        {
+            isUp = false;
+            isDown = true;
+        }
+        if(sinkoudo <= 0f)
+        {
+            isUp = true;
+            isDown = false;
+        }
+
+        if(isUp)
+        {
+            sinkoudo += Time.deltaTime / 3.0f;
+            targetUIRect.sizeDelta += new Vector2(easeInOutCubic(sinkoudo) / 20.0f, easeInOutCubic(sinkoudo) / 20.0f);
+        }
+        if(isDown)
+        {
+            sinkoudo -= Time.deltaTime / 3.0f;
+            targetUIRect.sizeDelta -= new Vector2(easeInOutCubic(sinkoudo) / 20.0f, easeInOutCubic(sinkoudo) / 20.0f);
+        }
+       
+        //targetUIRect.sizeDelta += new Vector2(easeInOutCubic(sinkoudo), easeInOutCubic(sinkoudo));
+    }
+
+    private float easeInOutCubic(float x)
+    {
+        return x < 0.5 ? 4 * x* x* x : 1 - Mathf.Pow(-2 * x + 2, 3) / 2;
+    }
+
+private void PlayEmote()
     {
         if (isJumpFlag || freeze || isBallHaving) return;
 
