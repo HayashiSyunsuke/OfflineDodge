@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameRule : MonoBehaviour
 {
@@ -75,6 +76,9 @@ public class GameRule : MonoBehaviour
     [SerializeField] tekitou_fade fade;
     [SerializeField] Image fadeImage;
 
+    private float m_ChangeSceneTimer = 0;
+    private bool m_isFadeIn = false;
+    [SerializeField] AudioSource audio;
 
     //赤チーム
     List<GameObject> redTeam = new List<GameObject>();
@@ -116,11 +120,14 @@ public class GameRule : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!fade.FadeOut(fadeImage, 0.5f))
+        if(!m_isFadeIn)
         {
-            return;
+            if (!fade.FadeOut(fadeImage, 0.5f))
+            {
+                return;
+            }
         }
-
+        
         //プレイヤーが４人より少なければ return する
         if (m_playerCounter.PlayerNum < 4)
             return;
@@ -163,11 +170,23 @@ public class GameRule : MonoBehaviour
 
         if (m_timeLimit.TotalTime <= 0.0f && !m_resultFlag)
         {
-            JudgmentOfWin();
             m_resultFlag = true;
             m_countSystem.TimeUp();
+
+            m_isFadeIn = true;
         }
             
+        if(m_isFadeIn)
+        {
+            m_ChangeSceneTimer += Time.deltaTime;
+        }
+
+        //カウント
+        if(m_ChangeSceneTimer > 2f)
+        {
+            audio.volume -= 0.1f * Time.deltaTime;
+            JudgmentOfWin();
+        }
 
 
         if (!flagOnce)
@@ -208,40 +227,41 @@ public class GameRule : MonoBehaviour
         {
             m_blueTotalDamage += damage;
         }
-
-
     }
 
     //勝敗判定
     public void JudgmentOfWin()
     {
-
-
-
         //与えたダメージの合計が高いほうの勝利
 
         //Blueチームの勝利
         if (m_redTotalDamage < m_blueTotalDamage)
         {
             //Blueチームの勝利演出
-
-            Debug.Log("青チームの勝ち");
+            if(fade.FadeIn(fadeImage,1.5f))
+            {
+                SceneManager.LoadScene("GiganteenWinResult");
+            }
+            //Debug.Log("青チームの勝ち");
 
         }
         //Redチームの勝利
         else if(m_redTotalDamage > m_blueTotalDamage)
         {
             //Redチームの勝利演出
-
-            Debug.Log("赤チームの勝ち");
-
+            if (fade.FadeIn(fadeImage, 1.5f))
+            {
+                SceneManager.LoadScene("TakasiWinResult");
+            }
         }
         //引き分け
         else if (m_redTotalDamage == m_blueTotalDamage)        
         {
-            //引き分けの演出
-
-            Debug.Log("引き分けでやんす");
+            //とりあえずRedチームの勝利演出
+            if (fade.FadeIn(fadeImage, 1.5f))
+            {
+                SceneManager.LoadScene("TakasiWinResult");
+            }
         }
 
     }

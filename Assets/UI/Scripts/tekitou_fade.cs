@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class tekitou_fade : MonoBehaviour
 {
     private bool isFirst = false;
-    private float alpha = 0.0f;
+    [SerializeField] private float alpha = 0.0f;
 
     public bool FadeIn(Image image, float fadeSpeed)
     {
@@ -15,6 +15,8 @@ public class tekitou_fade : MonoBehaviour
             alpha = 0.0f;
             isFirst = true;
         }
+
+        if (alpha >= 1) return true;
 
         alpha += fadeSpeed * Time.deltaTime;
         image.color = new Vector4(0f, 0f, 0f, alpha);
@@ -31,11 +33,18 @@ public class tekitou_fade : MonoBehaviour
             isFirst = true;
         }
 
+        if (alpha <= 0) return true;
+
         alpha -= fadeSpeed * Time.deltaTime;
         image.color = new Vector4(0f, 0f, 0f, alpha);
 
-        if (alpha <= 1) return true;
+        if (alpha <= 0) return true;
         else return false;
+    }
+
+    public void ResetAlpha()
+    {
+        alpha = 0;
     }
 
     public float Alpha

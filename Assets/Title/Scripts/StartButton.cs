@@ -4,11 +4,14 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-
+using UnityEngine.Audio;
 public class StartButton : MonoBehaviour
 {
+    private bool isEndFade = false;
+
     [SerializeField] tekitou_fade fade;
     [SerializeField] Image image;
+    [SerializeField] AudioSource audio;
     private bool isStart = false;
 
 #if ENABLE_INPUT_SYSTEM
@@ -30,12 +33,19 @@ public class StartButton : MonoBehaviour
 
     private void Update()
     {
+        if(!isStart)
+        isEndFade = fade.FadeOut(image, 1.0f);
+
+        if (!isEndFade) return;
+
         if (input.start)
             isStart = true;
 
         if (!isStart) return;
 
-        if(fade.FadeIn(image, 0.5f) && isStart)
+        audio.volume -= 0.1f * Time.deltaTime;
+
+        if(fade.FadeIn(image, 1.0f))
         {
             SceneManager.LoadScene("SampleScene");
         }

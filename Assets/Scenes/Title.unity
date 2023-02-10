@@ -1609,6 +1609,11 @@ PrefabInstance:
       objectReference: {fileID: 2800000, guid: 6c9959a6879d68743918deed34a3e4ae, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: af48832e72deb544fb8368d0019a8965, type: 3}
+--- !u!82 &987200422 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 6100863023658271464, guid: 760d3f18fc735cb4a9baf718fb681a0a, type: 3}
+  m_PrefabInstance: {fileID: 2030004182}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &993629821
 GameObject:
   m_ObjectHideFlags: 0
@@ -2243,6 +2248,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fade: {fileID: 1544348121}
   image: {fileID: 1666898552}
+  audio: {fileID: 987200422}
 --- !u!114 &1544348119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2386,6 +2392,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d790745bdcdf0445961fa23d920cd44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  alpha: 0
 --- !u!224 &1576362050 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4393800813186530394, guid: 24fd806ff33d8f74b89f200bc5831076, type: 3}
@@ -2446,7 +2453,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2747,6 +2754,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6100863023658271464, guid: 760d3f18fc735cb4a9baf718fb681a0a, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6100863023658271464, guid: 760d3f18fc735cb4a9baf718fb681a0a, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 8381b0e23e02caa4a8b82349e1b37f84, type: 3}
     - target: {fileID: 6100863023658271465, guid: 760d3f18fc735cb4a9baf718fb681a0a, type: 3}
       propertyPath: m_RootOrder
       value: 6
