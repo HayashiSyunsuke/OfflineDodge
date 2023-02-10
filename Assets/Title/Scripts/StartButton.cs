@@ -3,9 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class StartButton : MonoBehaviour
 {
+    [SerializeField] tekitou_fade fade;
+    [SerializeField] Image image;
+    private bool isStart = false;
+
 #if ENABLE_INPUT_SYSTEM
     private PlayerInput playerInput;
 #endif
@@ -25,7 +30,14 @@ public class StartButton : MonoBehaviour
 
     private void Update()
     {
-        if(input.start)
-        SceneManager.LoadScene("SampleScene");
+        if (input.start)
+            isStart = true;
+
+        if (!isStart) return;
+
+        if(fade.FadeIn(image, 0.5f) && isStart)
+        {
+            SceneManager.LoadScene("SampleScene");
+        }
     }
 }

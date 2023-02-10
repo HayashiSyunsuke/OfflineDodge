@@ -1,8 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.UI;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 public class GameRule : MonoBehaviour
 {
@@ -73,6 +72,9 @@ public class GameRule : MonoBehaviour
     private float m_videoTimer;
     private bool m_flagOnce;
 
+    [SerializeField] tekitou_fade fade;
+    [SerializeField] Image fadeImage;
+
 
     //赤チーム
     List<GameObject> redTeam = new List<GameObject>();
@@ -114,6 +116,11 @@ public class GameRule : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(!fade.FadeOut(fadeImage, 0.5f))
+        {
+            return;
+        }
+
         //プレイヤーが４人より少なければ return する
         if (m_playerCounter.PlayerNum < 4)
             return;
