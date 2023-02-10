@@ -17,5 +17,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GiganteenWinResult.unity
     guid: 8f12d1e712b039047bbd8d93ff211a65
+  - enabled: 1
+    path: Assets/Scenes/animationScene.unity
+    guid: 9902d27a34079c34aba3ec838d9c8f22
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 43e74da767eb4dd4ca70e8cb14c2191c, type: 2}
