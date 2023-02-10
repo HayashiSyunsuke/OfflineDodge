@@ -9501,7 +9501,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 944698274683928812, guid: 606a8a2c70fb17348a357f2e8f065623, type: 3}
       propertyPath: m_Layer
-      value: 17
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 944698274683928815, guid: 606a8a2c70fb17348a357f2e8f065623, type: 3}
       propertyPath: ShoulderOffset.x
@@ -9517,7 +9517,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 944698275310432464, guid: 606a8a2c70fb17348a357f2e8f065623, type: 3}
       propertyPath: m_Layer
-      value: 17
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 944698275310432558, guid: 606a8a2c70fb17348a357f2e8f065623, type: 3}
       propertyPath: m_Follow

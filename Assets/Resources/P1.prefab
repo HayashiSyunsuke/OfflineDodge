@@ -1864,7 +1864,7 @@ GameObject:
   - component: {fileID: 93820568660273055}
   - component: {fileID: 1288784603988889753}
   - component: {fileID: 823282314193292810}
-  m_Layer: 10
+  m_Layer: 13
   m_Name: Canvas
   m_TagString: PlayerCanvas
   m_Icon: {fileID: 0}
@@ -4045,7 +4045,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 2, y: 2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1576139646577577347
 CanvasRenderer:
