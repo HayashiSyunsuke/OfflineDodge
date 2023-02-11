@@ -549,7 +549,7 @@ public class ThirdPersonController : MonoBehaviour
         //衝突判定を取得
         HasBall = Physics.CheckSphere(spherePosition, BallCheckRadius, BallLayers, QueryTriggerInteraction.Ignore);
 
-        if (HasBall && Grounded && !Dodging)
+        if (HasBall && Grounded && !isEmote && !Reanimated && !Charging)
         {
             //photonView.RPC(nameof(PickUpBall), RpcTarget.All, this.gameObject);
 
@@ -1344,6 +1344,9 @@ public class ThirdPersonController : MonoBehaviour
 
             //死ぬ
             Dying = true;
+
+            //エモートリセット
+            ResetEmote();
 
             hp = 0;
 

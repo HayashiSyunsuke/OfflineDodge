@@ -90,6 +90,11 @@ public class Ball : MonoBehaviour
         {
             this.GetComponent<SphereCollider>().isTrigger = false;
         }
+
+        if(this.transform.position.y < -50f)
+        {
+            ResetPosition();
+        }
     }
 
     /// <summary>

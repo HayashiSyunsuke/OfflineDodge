@@ -43,7 +43,7 @@ public class StartButton : MonoBehaviour
         if (input.start)
         {
             isStart = true;
-            m_audio.Play();
+            //m_audio.Play();
         }
            
 
